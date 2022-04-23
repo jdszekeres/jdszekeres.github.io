@@ -4,7 +4,6 @@ triggers_found = [];
 simmilar_found = [];
 rythmes_found = [];
 const searchcountry = async searchBox => {
-  char_typed++;
   const res = await fetch('https://api.datamuse.com/sug?max=7&s='+searchBox);
   const words = await res.json();
   fits = []
@@ -25,16 +24,19 @@ const searchcountry = async searchBox => {
       kind = " trigger";
       if (triggers_found.includes(word) !== true) {
         triggers_found.push(word);
+        char_typed++;
       }
     } else if (in_rel(word, wordle[1][1])) {
       kind = " simmilar";
       if (simmilar_found.includes(word) !== true) {
         simmilar_found.push(word);
+        char_typed++;
       }
     } else if (in_rel(word, wordle[1][2])) {
       kind = " rythme";
       if (rythmes_found.includes(word) !== true) {
         rythmes_found.push(word);
+        char_typed++;
       }
     }
     
