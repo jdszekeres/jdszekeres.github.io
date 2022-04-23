@@ -8,7 +8,7 @@ async function word_for_today() {
     // To calculate the no. of days between two dates
     var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
     var list = await get_list();
-    //console.log("words until "+start.addDays(list.length)+" "+(list.length-Math.floor(Difference_In_Days)).toString()+" days away")
+    console.log("words until "+start.addDays(list.length)+" "+(list.length-Math.floor(Difference_In_Days)).toString()+" days away")
     return list[Math.floor(Difference_In_Days)]
 }
 x = "";
