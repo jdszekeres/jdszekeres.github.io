@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>word gusser</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+    input {
+      padding: 10px;
+      border-radius: 90px;
+      width: 100%
+    }
+    div.row {
+
+      font-size: 17px;
+    }
+    .trigger, #trigger {
+      color: orange;
+      font-family: 'Poppins', sans-serif;
+    }
+    .match {
+      color: green;
+      font-family: 'Poppins', sans-serif;
+    }
+    .simmilar, #simmilar {
+      color: blue;
+      font-family: 'Poppins', sans-serif;
+    }
+    .rythme, #rhyming {
+      color: red;
+      font-family: 'Poppins', sans-serif;
+    }
+    p {
+      font-family: 'Poppins', sans-serif;
+    }
+    row {
+      font-family: 'Poppins', sans-serif;
+      font-size: 10px;
+    }
+    /* modal */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+    
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+
+<body>
+    <input type="text" id="search" autocomplete="off">
+    <div id="wordlist"></div>
+    <p>asociated with words: <span id="trigger"></span></p>
+    <p>simmilar words: <span id="simmilar"></span></p>
+    <p>rhyming words: <span id="rhyming"></span></p>
+    <p>you have typed <span id="letter">0</span> letters</p>
+    <div id="myModal" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Guess words to get hints to find the mystery word. Words that are helpful will show up in their catagories.</p>
+      </div>
+    
+    </div>
+</body>
+<script src="app.js"></script>
+<script src="word.js"></script>
+</html>
