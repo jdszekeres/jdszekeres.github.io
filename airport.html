@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>The airport game</title>
+  <link href="scripts/air.style.css" rel="stylesheet" type="text/css" />
+  <script src="scripts/air.leaderboard.js"></script>
+  <script src="scripts/air.airports.js"></script>
+</head>
+
+<body>
+  <h1>the airport game</h1>
+  <h2 id="guess">you have guessed 0/0 airports</h2>
+  <input type="text" id="code" maxlength="3" onkeydown="find(event)">
+  <button onclick="add_lb()">add current score to leaderboard</button>
+  <br>
+  <h3>leaderboard</h3>
+    <ol id="points"></ol>
+  <h4>airports: found</h4>
+  <div id="found"></div>
+  <script src="script.js"></script>
+
+</body>
+
+</html>
