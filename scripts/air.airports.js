@@ -1,5 +1,5 @@
 async function get_airport() {
-  var json = await fetch("resources/airports.json");
+  var json = await fetch("resources/airport.json");
   var resp = await json.json();
   final=[]
   resp.forEach((airport)=>{
