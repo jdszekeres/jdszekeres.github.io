@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title> <style>body,html{height:100%;width:100%}#bot,#player{display:flex}#bot>div,#player>div{height:314px;width:226px;font-size:220px;border:1px solid #000}</style>
+</head>
+
+<body>
+  <button onclick="flip()">flip</button>
+  <div id="bot">
+    <img width="226px" height="314px">
+    <div width="226px" height="314px">
+      30
+    </div>
+    <span>
+      bot
+  </span>
+  </div>
+  <div id="player">
+    <img width="226px" height="314px">
+    <div width="226px" height="314px">
+      30
+    </div>
+    <span>
+      you
+    </span>
+  </div>
+
+  <script>const suits=["H","D","S","C"],values=["2","3","4","5","6","7","8","9","0","J","Q","K","A"],back_img="https://www.deckofcardsapi.com/static/img/back.png";var cur_bot,cur_player,deck=[];botcard=document.querySelector("#bot>img"),playercard=document.querySelector("#player>img"),dbot=document.querySelector("#bot>div"),dplayer=document.querySelector("#player>div");const get_img=(a,b)=>"https://deckofcardsapi.com/static/img/"+b+a+".png",value_array={"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"0":10,J:11,Q:12,K:13,A:14};suits.forEach(a=>{values.forEach(b=>{deck.push({suit:a,card:b})})}),deck.sort(()=>.5-Math.random());var bot=deck.slice(0,26),you=deck.slice(-26),bot_discard=[],you_discard=[];function flip(){0===you.length&&(0===you_discard.length?(alert("you lose"),document.querySelector("button").disabled=!0):(you=you_discard,you_discard=[])),0===bot.length&&(0===bot_discard.length?(alert("you win"),document.querySelector("button").disabled=!0):(bot=bot_discard,bot_discard=[])),cur_player=you.pop(),cur_bot=bot.pop(),botcard.src=get_img(cur_bot.suit,cur_bot.card),playercard.src=get_img(cur_player.suit,cur_player.card),document.querySelector("button").disabled=!0,setTimeout(()=>{value_array[cur_player.card]>value_array[cur_bot.card]?(you_discard.push(cur_player),you_discard.push(cur_bot)):value_array[cur_player.card]<value_array[cur_bot.card]?(bot_discard.push(cur_player),bot_discard.push(cur_bot)):value_array[cur_player.card]===value_array[cur_bot.card]&&(np=you.pop(),nb=bot.pop(),value_array[np.card]<value_array[nb.card]?bot.push(cur_player,cur_bot,np,nb):value_array[np.card]>value_array[nb.card]?you.push(cur_player,cur_bot,np,nb):(you.push(cur_player,np),bot.push(cur_bot,nb))),dbot.innerText=bot_discard.length,dplayer.innerText=you_discard.length,botcard.src=back_img,playercard.src=back_img,document.querySelector("button").disabled=!1},1e3)}botcard.src=back_img,playercard.src=back_img,dbot.innerText=bot_discard.length,dplayer.innerText=you_discard.length</script>
+</body>
+
+</html>
