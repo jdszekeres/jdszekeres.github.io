@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="number" placeholder="angle" name="angle" id="angle">
+    <input type="number" name="firing_speed" id="firing_speed" placeholder="firing speed">
+    <button onclick="calc()">calculate</button>
+    <span id="result"></span>
+</body>
+<script>
+    function toDegrees (angle) {
+        return angle * (Math.PI / 180);
+    }
+    function calc() {
+        angle = document.getElementById("angle").value
+        firing_speed = document.getElementById("firing_speed").value
+        vy = Math.sin(toDegrees(angle)) * firing_speed
+        vx = Math.cos(toDegrees(angle)) * firing_speed
+
+        flight_time = (vy/9.8) *2
+        distance = vx * flight_time
+
+        document.getElementById("result").innerHTML = "<br>vx: " + vx +"<br>vy: " +vy +"<br> air time: " + flight_time + "<br> dist traveled: "+distance
+
+    }
+</script>
+</html>
