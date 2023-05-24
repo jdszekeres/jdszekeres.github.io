@@ -399,6 +399,7 @@
     function set_time() {
         time = new Date()
         hours = time.getHours()
+        meridiem = "AM";
         if (hours > 12) {
             hours -= 12;
             meridiem = "PM";
