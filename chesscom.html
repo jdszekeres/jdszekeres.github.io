@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess.com user analysis</title>
+    <link rel="icon" href="https://chess.com/bundles/web/favicons/favicon.11c6b6d5.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        /*form*/
+        #username:placeholder-shown {
+            background-image: url('https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/SamCopeland/phpe9mLN5.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            text-indent: 20px;
+            padding: 5px 3px;
+            transition: 0.3s;
+        }
+
+        #username:focus {
+            background-image: none;
+            text-indent: 0px
+        }
+        #form  {
+            padding: 20px;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .form-control {
+                width: 700px;
+                height: 100px;
+                float: center;
+                margin: auto;
+                font-size: 40px;
+                font-weight: bold;
+            }
+        }
+
+        /*elements*/
+        #fide {
+            background-color: red;
+            font-weight: bold;
+            color: white;
+            border-radius: 10px;
+        }
+
+        #user_info {
+            padding: 5px;
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+
+        #avatar {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            padding: 10px;
+            border: 0px solid transparent;
+
+        }
+
+        .uname {
+            font-size: 50px;
+            font-weight: 800;
+        }
+
+        img:-moz-broken {
+            opacity: 0;
+        }
+
+
+
+        .progress {
+            display: flex;
+            width: 200px;
+            height: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .win {
+            background-color: #97BD4B;
+        }
+
+        .draw {
+            background-color: #B9C2CD;
+        }
+
+        .lose {
+            background-color: #CF4947;
+        }
+
+        .win,
+        .draw,
+        .lose {
+            font-weight: 800;
+            font-size: 20px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        #chart{
+            width: 100%;
+            height: 700px;
+            padding: 5px;
+            margin: 5px;
+
+        }
+
+        .data-fixed {
+            visibility: hidden;
+        }
+
+        #spinner {
+            display: block;
+            width: 350px;
+            height: 350px;
+            animation: spin 10s ease-in-out infinite;
+            margin: auto;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .badge {
+            width: auto;
+            height: 20px;
+            vertical-align: text-top;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bolder;
+            color: white;
+            background-color: blue;
+            border-radius: 5px;
+        }
+        .badge-win {background-color:#97BD4B ;}
+        .badge-lose {background-color: #CF4947;}
+        .badge-draw {background-color: #B9C2CD;}
+
+        button:focus { outline: none !important; box-shadow: none !important; }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #pie{
+            width: 25%;
+            height: auto;
+            margin: auto;
+            padding: 10px;
+            
+        }
+    </style>
+    <script type="module">
+        import { createApp } from 'https://unpkg.com/petite-vue?module'
+
+        createApp({
+            // exposed to all expressions
+            username: "",
+            loading: "",
+
+
+            async submit() {
+                document.getElementById("submit").style.border = "0px solid transparent";
+                 document.getElementById("submit").innerHTML = 
+                 `<span id="spinner">♜ ♞ ♝ ⭘ ♚ ♝ ♞ ♜<br>♟ ♟ ♟ ♟ ⭘ ♟ ♟ ♟<br>⭘ ⭘ ⭘ ⭘ ⭘ ⭘ ⭘ ⭘<br>⭘ ⭘ ⭘ ⭘ ♟ ⭘ ⭘ ⭘<br>⭘ ⭘ ⭘ ⭘ ⭘ ⭘ ♙ ♛<br>⭘ ⭘ ⭘ ⭘ ⭘ ♙ ⭘ ⭘<br>♙ ♙ ♙ ♙ ♙ ⭘ ⭘ ♙<br>♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖</span>`
+
+                var populate = await get_stats(username.value)
+                populate_stats(populate)
+
+            }
+        }).mount()
+    </script>
+
+</head>
+
+<body v-scope>
+    <h1 class="hide-after display-2">Enter your <img src="https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/SamCopeland/phpe9mLN5.png" height="40px"> username to view stats</h1>
+        
+    <div class="col-3" id="form">
+        <input type="text" name="username" placeholder=" " id="username" @keypress="username = $el" class="form-control"
+            required>
+        <br />
+        <label id="loading" class="h3"></label>
+        <button id="submit" @click="submit()" class="form-control" width="25%">submit</button>
+    </div>
+    <div id="app">
+        <div class="row" id="user_info">
+            <img src="http://transparent-favicon.info/favicon.ico" id="avatar">
+            <h1>
+                <span id="uname"></span>
+                <img src="http://transparent-favicon.info/favicon.ico" width="24" height="18" id="flag">
+                <span id="is_premium"></span>
+            </h1>
+
+        </div>
+        <div class="profile">
+            <img src="http://transparent-favicon.info/favicon.ico" id="league" width="48px">
+            <p id="last_online"></p>
+        </div>
+        <h1 id="total_games"></h1>
+        <br>
+        <div id="modes" class="row">
+
+        </div>
+        <br>
+        <canvas id="chart"></canvas>
+        <h4 class="data-fixed">Top 10 openings: </h4>
+        <br>
+        <ul id="openings_list" class="list-group"></ul>
+        <h4 class="data-fixed">Games ending in: </h4>
+        <br>
+        <canvas id="pie"></canvas>
+        <ul id="ending_list"  class="list-group">
+        </ul>
+    </div>
+</body>
+<script>
+    function until(conditionFunction) {
+
+        const poll = resolve => {
+            if (conditionFunction()) resolve();
+            else setTimeout(_ => poll(resolve), 400);
+        }
+
+        return new Promise(poll);
+    }
+    const leagues = { 
+        "wood": "https://www.chess.com/bundles/web/images/leagues/badges/wood.43ce19b5.svg",
+        "stone": "https://www.chess.com/bundles/web/images/leagues/badges/stone.16754acb.svg",
+        "bronze": "https://www.chess.com/bundles/web/images/leagues/badges/bronze.6b9157a9.svg",
+        "silver": "https://www.chess.com/bundles/web/images/leagues/badges/silver.5a48aa46.svg",
+        "crystal": "https://www.chess.com/bundles/web/images/leagues/badges/crystal.398d2f1a.svg",
+        "elite": "https://www.chess.com/bundles/web/images/leagues/badges/elite.aa05fdbe.svg",
+        "champion": "https://www.chess.com/bundles/web/images/leagues/badges/champion.39632353.svg",
+        "legend": "https://www.chess.com/bundles/web/images/leagues/badges/legend.6024dc7d.svg"
+    }
+    const endings = {
+        "win": "Win",
+        "checkmated": "Checkmate",
+        "agreed": "Draw by agreement",
+        "repetition": "Draw by repetition",
+        "timeout": "Loss by timeout",
+        "resigned": "Loss by resignation",
+        "stalemate": "Stalemate",
+        "lose": "Loss",
+        "insufficient": "Draw by insufficient material",
+        "50move": "Draw by 50-move rule",
+        "abandoned": "Loss by Abandonment",
+        "kingofthehill": "Loss by opponent king reaching the hill",
+        "threecheck": "Loss by being checked for the 3rd time",
+        "timevsinsufficient": "Draw by timeout vs insufficient material",
+        "bughousepartnerlose": "Bughouse partner lost",
+    }
+    function populate_stats(populate) {
+        document.getElementById("avatar").src = populate.avatar
+
+        document.getElementById("uname").innerHTML = populate.username
+        document.getElementById("flag").src = populate.flag
+        if (populate.subscription == "premium") {
+            document.getElementById("is_premium").innerHTML = "💎"
+        }
+        document.getElementById("last_online").innerHTML = `last online: ${populate.last_online} (${populate.time_since_last_online} days ago)`
+        document.getElementById("league").src = leagues[populate.league.toLowerCase()]
+        populate.modes.forEach(function (mode) {
+            document.getElementById("modes").innerHTML += render_game_mode(mode)
+        })
+        document.getElementById("total_games").innerHTML = `${populate.overview.total.toLocaleString()} games`
+        const entries = Object.entries(populate.overview.openings);
+
+        // Sort the array based on cnt values in descending order
+        entries.sort((a, b) => b[1] - a[1]);
+
+        // Extract the top 10 elements
+        const top10 = entries.slice(0, 10);
+
+        // Convert the extracted elements back into an object
+        const filteredJson = Object.fromEntries(top10);
+        Object.keys(filteredJson).forEach(function (type) {
+            document.getElementById("openings_list").innerHTML += `
+            <li class="opening list-group-item d-flex justify-content-between align-items-center">${type}
+                 <span class="badge">${filteredJson[type].toLocaleString()}</span>
+                 </li>`
+        })
+        const ending_entries = Object.entries(populate.overview.endings);
+        ending_entries.sort((a, b) => b[1] - a[1]);
+        ending_obj = Object.fromEntries(ending_entries)
+        new Chart(document.getElementById("pie"),{
+            type: "doughnut",
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            sort: function (a,b) {return a.fillStyle > b.fillStyle ? 1 : -1}
+                        }
+                    }
+                }
+            },
+            data: {
+                labels: Object.keys(ending_obj),
+                datasets: [
+                    {label: "Endings of games",
+                     data: Object.values(ending_obj),
+                     backgroundColor: Object.keys(ending_obj).map(
+                        (name) =>{
+                        a = "#97BD4B"
+                        if (name.toLowerCase().includes("los")) {a="#CF4947"}
+                        if (name == "Stalemate") {a = "#B9C2CD"}
+                        if (name.toLowerCase().includes("draw")) {a = "#B9C2CD"} 
+                        return a
+                    })
+                },
+                ]
+            }
+        })
+        Object.keys(ending_obj).forEach(function (type)  {
+            add_class = "win"
+            if (type.toLowerCase().includes("los")) {add_class="lose"}
+            if (type.toLowerCase().includes("draw") || type === "Stalemate") {add_class = "draw"}
+            document.getElementById("ending_list").innerHTML += 
+            `<li class="ending list-group-item d-flex justify-content-between align-items-center">${type} 
+                <span class="badge badge-${add_class}">${ending_obj[type].toLocaleString()}</span>
+                </li>`
+        })
+        
+        data = populate.overview.data
+        // chartjs
+        colors = {bullet:"#A58B44",
+        blitz:"#F7C045",
+        rapid:"#6D9C41",
+        daily:"#4400ff"};
+        function transformData(data) {
+    var datasets = [];
+
+    data.forEach(function (item) {
+        var dataset = {
+            label: item.name,
+            data: [],
+            backgroundColor: colors[item.name], 
+            borderColor: colors[item.name], 
+            borderWidth: 1,
+            radius: 0,
+            showLine: true,
+        };
+
+        item.values.sort(function (a, b) {
+            return a.date - b.date; // Sort data based on the date in ascending order
+        });
+        item.values.forEach(function (value) {
+            dataset.data.push({ x: value.date, y: value.elo });
+        });
+
+        datasets.push(dataset);
+    });
+
+    return datasets;
+}
+min = Infinity;
+data.forEach(function (i) {
+    i.values.forEach(k=>{if (k.date < min) {min = k.date}})
+})
+min = new Date(min);
+months = [];
+month =  min.getMonth() + ((min.getFullYear()-2000) * 12) + 1;
+current_month = new Date().getMonth() + ((new Date().getFullYear()-2000) * 12);
+while (month < current_month) {
+    
+    year = 2000 + Math.floor(month  / 12);
+    moy = (month % 12) +1;
+    moy_fmt = `0${moy}`.slice(-2)
+    months.push(Date.parse(`${year}-${moy_fmt}-01`));
+    month += 1;
+}
+var transformedData = transformData(data);
+
+new Chart(document.getElementById("chart"), {
+  type: 'scatter',
+  height: window.innerHeight - 100,
+  data: {
+    datasets: transformedData
+  },
+  options: {
+    plugins: {
+        title: {
+            display: true,
+            text: 'Rating over time',
+        }
+    },
+    scales: {
+      x: {
+        display: true,
+        afterBuildTicks: axis => axis.ticks = months.map(v => ({ value: v })),
+        ticks: {
+          callback: (val) => {return `${new Date(val).getMonth()+1} \'${new Date(val).getFullYear()-2000}`},
+        }
+      },
+      x2: {
+        display: false // Remove the second x-axis
+      }
+    }
+  }
+});
+
+        //hide form, show headers
+        document.querySelectorAll(".data-fixed").forEach(element => {
+            element.style.visibility = "visible"
+        })
+        document.querySelectorAll(".form-control").forEach(element => {
+            element.style.display = "none"
+        });
+        document.querySelectorAll(".hide-after").forEach(element => {
+            element.style.display = "none"
+        })
+        document.getElementById("loading").style.display = "none";
+    }
+    async function get_stats(uname) {
+        document.getElementById("loading").innerText = "getting basic stats"
+        profile_resp = await fetch(`https://api.chess.com/pub/player/${uname}`)
+
+        profile_json = await profile_resp.json()
+        user_iso = profile_json.country.split("/").at(-1).toLowerCase()
+        user_flag = `https://flagcdn.com/24x18/${user_iso}.png`
+        paying_status = profile_json.status == "basic" ? "free" : "premium"
+        league = profile_json.league
+        last_online_epoch = profile_json.last_online * 1000
+        last_online_time = new Date(last_online_epoch).toLocaleString()
+        t_logon = Math.round((Date.now() - last_online_epoch) / (1000 * 3600 * 24))
+        friends = profile_json.followers
+        avatar = profile_json.avatar
+        if (avatar == undefined) {
+            avatar = "https://www.chess.com/bundles/web/images/noavatar_l.84a92436.gif"
+        }
+        document.getElementById("loading").innerText = "loading monthly archives"
+        start = new Date()
+        game_stats = await iter_archives(uname)
+        end = new Date()
+        exec_time = end - start
+        console.log(`processed ${game_stats.total} games in ${exec_time} ms`)
+        document.getElementById("loading").innerText = "loading stats for game mode"
+        ranking_resp = await fetch(`https://api.chess.com/pub/player/${uname}/stats`)
+        ranking_json = await ranking_resp.json()
+        modes = ["chess_daily", "chess_rapid", "chess_blitz", "chess_bullet"]
+        human_readable_mode = ["daily", "rapid", "blitz", "bullet"]
+        done_modes = []
+        for (let i = 0; i < modes.length; i++) {
+            if (ranking_json[modes[i]] !== undefined) {
+                if (ranking_json[modes[i]].best == undefined) {
+                    ranking_json[modes[i]].best = ranking_json[modes[i]].last
+                }
+                done_modes.push(get_game_mode_stats(ranking_json[modes[i]], human_readable_mode[i],game_stats.opponents[3-i]))
+            }
+        }
+        if (profile_json.title != undefined) {
+            uname = "<span id='fide'>" + profile_json.title + "</span>" + " " + uname
+        }
+        document.getElementById("loading").innerText = "render stats to browser"
+        return {
+            username: uname,
+            avatar: avatar,
+            last_online: last_online_time,
+            time_since_last_online: t_logon,
+            country: user_iso,
+            flag: user_flag,
+            subscription: paying_status,
+            league: league,
+            modes: done_modes,
+            overview: game_stats
+
+
+        }
+    }
+    function get_game_mode_stats(json, name,elo) {
+        document.getElementById("loading").innerText = "loading " + name + " mode stats"
+        console.log(`getting game mode stats for ${name}`)
+        current_ranking = json.last.rating ?? 0
+        best_ranking = json.best.rating ?? 0
+        record = `${json.record.win ?? 0}w/${json.record.loss ?? 0}l/${json.record.draw ?? 0}d`
+        total = json.record.win + json.record.loss + json.record.draw
+        progress = `<div class="progress">
+        <div class="win"  style = "width: ${Math.round(json.record.win / total * 200)}px">${Math.round(json.record.win / total * 100)}%</div>
+        <div class="draw" style = "width: ${Math.round(json.record.draw / total * 200)}px">${Math.round(json.record.draw / total * 100)}%</div>
+        <div class="lose" style = "width: ${Math.round(json.record.loss / total * 200)}px">${Math.round(json.record.loss / total * 100)}%</div>
+    </div>`
+        return { name: name, current_elo: current_ranking, best_elo: best_ranking, record: record, progress: progress, best: json.best.game,opp_elo:elo.elo,best_opp: elo.best }
+    }
+    async function iter_archives(uname) {
+        const archives_resp = await fetch(`https://api.chess.com/pub/player/${uname}/games/archives`);
+        const archives_json = await archives_resp.json();
+
+        const stats = {
+            total: 0,
+            rated: 0,
+            black: 0,
+            white: 0,
+            endings: {},
+            openings: {},
+        };
+
+        const data = {
+            bullet: { values: [], opponent:[]},
+            blitz: { values: [] , opponent:[]},
+            rapid: { values: [] , opponent:[]},
+            daily: { values: [] , opponent:[]},
+        };
+        done = false;
+        async function load(index = 0) {
+            if (archives_json.archives[index] === undefined) {
+                done = true;
+                return;
+            }
+            document.getElementById("loading").innerText = "loading monthly archive " + archives_json.archives[index].split("games/")[1]
+            archive = archives_json.archives[index];
+            const month_resp = await fetch(archive,{keepalive: true});
+            load(index + 1);
+            const month_json = await month_resp.json();
+            
+            for (const game of month_json.games) {
+                if (game.rules !== "chess") {
+                    continue;
+                }
+                stats.total += 1
+                if (game.rated) {
+                    stats.rated += 1;
+                }
+
+                const player = game.black.username === uname ? "black" : "white";
+                const opponent = game.black.username === uname ? "white" : "black";
+                    
+                stats[player] += 1;
+
+                
+
+                const end = endings[game[player].result];
+                if (stats.endings[end] !== undefined) {
+                    stats.endings[end] += 1;
+                } else {
+                    stats.endings[end] = 1;
+                }
+                const time_class = game.time_class;
+                data[time_class].opponent.push(game[opponent].rating);
+                const elo = game[player].rating;
+                const pgn = game.pgn;
+                try {
+                    opening = parseOpeningURL(pgn.match(/(?<=\[ECOUrl ").*?(?="\])/)[0])
+                    if (stats.openings[opening] !== undefined) {
+
+                        stats.openings[opening] += 1;
+                    } else {
+                        stats.openings[opening] = 1;
+                    }
+                } catch (err) {
+                    console.log("Could not parse opening: game aborted");
+                }
+
+
+                try {
+                    const date = pgn.match(/(?<=\[EndDate ").*?(?="\])/)[0];
+                    const time = pgn.match(/(?<=\[EndTime ").*?(?="\])/)[0];
+                    const utcDateString = date.replace(".", "-") + " " + time + " GMT+00:00";
+                    const utcTimestamp = new Date(utcDateString).getTime();
+                    data[time_class].values.push({ date: utcTimestamp, elo: elo });
+                } catch (err) {
+                    console.log("Invalid data from variant: " + game.rules);
+                }
+            }
+        };
+
+        await load();
+        await until(_ => done == true);
+
+        const avg_opponent_elo = [];
+        const elos = [];
+        const modes = ["bullet", "blitz", "rapid", "daily"];
+
+        for (const mode of modes) {
+            data[mode].values.sort(function (a, b) { return a.date > b.date })
+            elos.push({ name: mode, values: data[mode].values });
+            try {
+            elo = Math.round(data[mode].opponent.reduce((a, b) => a + b) / data[mode].opponent.length)
+            best = Math.max(...data[mode].opponent)
+            
+            } catch (err) {
+                elo = 0;
+                best = 0;
+            }
+
+            avg_opponent_elo.push({name: mode, elo: elo,best:best})
+        }
+
+        stats.opponents = avg_opponent_elo;
+        stats.data = elos;
+        return stats;
+    }
+
+
+
+    function render_game_mode(json) {
+        return `<div id="${json.name}" class="col-md-3">
+            <h2>${json.name}</h2>
+            <h3>${json.record}</h3>
+            ${json.progress}
+            <h3>${json.current_elo}</h3>
+            <h4>best: <a href = "${json.best}">${json.best_elo}</a></h4>
+            <h5>avg. opponent elo: ${json.opp_elo}</h3>
+
+        </div>`
+    }
+    function parseOpeningURL(openingURL) {
+        const regex = /\/openings\/(.+)/;
+        const match = openingURL.match(regex);
+        if (match && match.length > 1) {
+            const openingUrl = match[1];
+            const openingName = openingUrl.split('-').join(' ');
+            return openingName;
+        }
+        return null;
+    }
+
+
+
+</script>
+
+</html>
