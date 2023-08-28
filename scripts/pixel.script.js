@@ -6,8 +6,8 @@ var temp_paper = null;
 var current_color = null;
 var current_name = null;
 async function start() {
-    game_req = await fetch("game.json")
-    wallpaper_req = await fetch("wallpapers.json")
+    game_req = await fetch("../resources/pixel.game.json")
+    wallpaper_req = await fetch("../resources/pixel.wallpapers.json")
     wallpapers = await wallpaper_req.json();
     setTimeout(()=>{wallpapers.forEach((x)=>{preloadImage(x)})},100)
     games = await game_req.json()
