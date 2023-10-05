@@ -2,7 +2,7 @@ Date.prototype.addDays=function(d) {
     return new Date(this.getTime() + d*86400000); // milliseconds
  };
 async function word_for_today() {
-    var start = new Date("04/21/22");
+    var start = new Date("10/04/23");
     var today = new Date();
     var Difference_In_Time = today.getTime() - start.getTime();
     // To calculate the no. of days between two dates
