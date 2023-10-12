@@ -2,7 +2,7 @@ var airports = [];
 var total = 0;
 var guessed = [];
 (function ()  {
-    show().then((x)=>console.log("got LB"))
+    show()
     fetch("/resources/airport.json").then(x=>x.json()).then(x=>{airports=x;total = airports.length;document.getElementById("guessed2").innerText = total})
 
 }) ()
