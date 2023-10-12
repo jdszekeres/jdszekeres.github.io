@@ -1,6 +1,9 @@
 const baseURL = 'https://us-central1-js-capstone-backend.cloudfunctions.net/api/games';
 const currentGameID = 'airportgame-jdszekeres';
-
+const add_lb = () => {
+  uname = prompt("Username","anymous");
+  setData(uname,total);
+}
 const setData = async (userName, userScore) => {
   const connect = await fetch(`${baseURL}/${currentGameID}/scores`, {
     method: 'POST',
@@ -32,3 +35,4 @@ const show = () => {
     });
   });
 };
+
