@@ -2,7 +2,7 @@ var airports = [];
 var total = 0;
 var guessed = [];
 (function ()  {
-    fetch("USAirports.json").then(x=>x.json()).then(x=>{airports=x;total = airports.length;document.getElementById("guessed2").innerText = total})
+    fetch("/resources/airport.json").then(x=>x.json()).then(x=>{airports=x;total = airports.length;document.getElementById("guessed2").innerText = total})
 
 }) ()
 document.getElementById("guesser").addEventListener("keypress", (event)=>{if (event.key === "Enter") {check_airport()}});
