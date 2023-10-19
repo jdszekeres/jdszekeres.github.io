@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <style>
+      html,body{width:100%;height:100%}
+      .z {
+      display: flex;
+      width: 100%;
+      height:100%;
+      margin: 0px;
+      padding:0px;
+      flex-wrap: wrap;}
+      button{
+      width: 200px;
+      height:200px;
+      border:0px solid transparent;
+      }
+      #break {
+        width:100%
+      }
+
+      button:nth-child(1) {
+        background-color: red;
+      }
+      button:nth-child(2) {
+        background-color: yellow;
+      }
+      button:nth-child(4) {
+        background-color: blue;
+      }
+      button:nth-child(5) {
+        background-color: green;
+      }
+
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div id="quiz"></div>
+  <script>const diff=["easy","medium","hard"]
+  var dif=1
+  var correct=0;
+  var incorrect=0;
+  const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+  async function add_questing(color = "red", dog = true) {
+    if (dog) {
+      document.body.style["background-color"]=color
+    }
+    if (color!=="red") {
+      dif++
+    } else if (color==="red"){
+      dif--;
+    }
+    dif=clamp(dif,0,2)
+    array=[1,2,3,4]
+    document.getElementById("quiz").innerHTML=""
+    var resp=await fetch("https://the-trivia-api.com/api/questions?categories=science,history,geography,general_knowledge&limit=1&difficulty="+diff[dif])
+    var resp=await resp.json()
+    question=resp[0]["question"]
+    yes=resp[0]["correctAnswer"]
+    no=resp[0]["incorrectAnswers"]
+    questions=[`<button onclick="correct+=1;add_questing('green')" id=${array.splice(Math.floor(Math.random()*array.length), 1)}>${yes}</button>`,`<button onclick="incorrect+=1;add_questing()">${no[0]}</button>`,`<button onclick="incorrect+=1;add_questing()" id=${array.splice(Math.floor(Math.random()*array.length), 1)}>${no[1]}</button>`,`<button onclick="incorrect+=1;add_questing()" id=${array.splice(Math.floor(Math.random()*array.length), 1)}>${no[2]}</button>`].sort(() => Math.random() - 0.5)
+  x=`<h6>correct: ${correct}<br>incorrect: ${incorrect}</h6><h1>${question}</h1><br><div class="z">${questions.splice(0,2).join(" ")}<div id="break"></div>${questions.join("")}</div>`
+  document.body.style["background-color"]="transparent"
+  document.getElementById("quiz").innerHTML=x
+  }
+  add_questing("blue",false)</script>
+
+ <!--
+  This script places a badge on your repl's full-browser view back to your repl's cover
+  page. Try various colors for the theme: dark, light, red, orange, yellow, lime, green,
+  teal, blue, blurple, magenta, pink!
+  -->
+  <script src="https://replit.com/public/js/replit-badge.js" theme="blue" defer></script> 
+</body>
+
+</html>
