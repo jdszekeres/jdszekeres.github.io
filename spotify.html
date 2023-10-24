@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Spotify game</title>
+  <style>html {
+  height: 100%;
+  width: 100%;
+}
+
+.chooser {
+  border-radius: 0px;
+  border: 0px solid transparent;
+  color: black;
+  background-color: transparent;
+    font-size:15px;
+  font-family:Impact;
+  width:210px;
+  height:150px;
+  border-width:0px;
+  font-weight:bold;
+  
+}
+#start {
+  background-color: transparent;
+  border: 0px solid transparent;
+  animation: 3s linear infinite running spin;
+}
+
+@keyframes spin{
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360);
+  }
+}</style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
+</head>
+
+<body>
+  <h1 id="prompt"><img src="https://open.spotifycdn.com/cdn/images/favicon.0f31d2ea.ico">spotify game</h1>
+  <button id="start" onclick="main()" id="start"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+      fill="#000000" height="128px" width="128px" version="1.1" id="Capa_1" viewBox="0 0 60 60" xml:space="preserve">
+      <g>
+        <path
+          d="M45.563,29.174l-22-15c-0.307-0.208-0.703-0.231-1.031-0.058C22.205,14.289,22,14.629,22,15v30   c0,0.371,0.205,0.711,0.533,0.884C22.679,45.962,22.84,46,23,46c0.197,0,0.394-0.059,0.563-0.174l22-15   C45.836,30.64,46,30.331,46,30S45.836,29.36,45.563,29.174z M24,43.107V16.893L43.225,30L24,43.107z" />
+        <path
+          d="M30,0C13.458,0,0,13.458,0,30s13.458,30,30,30s30-13.458,30-30S46.542,0,30,0z M30,58C14.561,58,2,45.439,2,30   S14.561,2,30,2s28,12.561,28,28S45.439,58,30,58z" />
+      </g>
+    </svg></button>
+  <script>var next=false;
+const timeout = async ms => new Promise(res => setTimeout(res, ms));
+
+class picker {
+  constructor(title,options) {
+    this.title=title
+    this.options=options
+  }
+  render(element) {
+    this.element = element
+    var options = []
+    for (let i = 0; i < this.options.length; i++) {
+      
+      options.push(`<button onclick="return_chosen('${i}')" class="chooser">${this.options[i]}</button>`);
+    }
+  
+    var html_string=`
+    <h1>${this.title}</h1>
+    ${options.join("<br>")}
+    `
+    this.element.innerHTML = html_string
+  }
+  async await_user_selected() {
+    while (next === false) await timeout(50);
+    var x=next
+    next=false
+    return x
+  }
+  destroy() {
+    this.element.remove()
+  }
+}
+
+function return_chosen(chosen) {
+  next = chosen
+}</script>
+  <script>const pause = async ms => new Promise(res => setTimeout(res, ms));
+const client_id = '1c82a5b0cf2447f0beb843e42d0d06e9'
+const client_secret = 'd333c0311fa348998e4e2cb247a447f3'
+const redirect_uri = 'https://spotifyauth.jdszekeres.repl.co/'
+const scopes = ['user-read-private', 'user-read-email','playlist-read-private']
+authorize_url = 'https://accounts.spotify.com/authorize?client_id=' + client_id + '&response_type=code&redirect_uri=' + redirect_uri +'&scope='+ scopes.join('%20')
+var headers;
+var audio;
+var next = false;
+async function main() {
+  document.getElementById("start").remove()
+  atoken = await user_auth()
+  auth = await get_a_token(atoken)
+  playlists = await get_playlists(auth)
+  playlist = await choose_playlist(playlists)
+  songs = await get_songs(playlist)
+  
+  while (true) {
+    unique = choose_songs(songs)
+    console.log(unique[0])
+    song = await song_picker(unique)
+    
+    console.log(song)
+    await show_score(song[0] === unique[0][0])
+  }
+  
+}
+
+async function user_auth() {
+  console.log(authorize_url)
+  
+  input = document.createElement("input")
+  input.placeholder = "Paste Code Here";
+  document.body.appendChild(input)
+    button = document.createElement("button")
+  button.innerHTML = "Submit"
+    button.onclick = () => {next=true}
+    document.body.appendChild(button)
+      window.open(authorize_url)
+    while (next === false) await pause(50); // pause script but avoid browser to freeze ;)
+    next = false; // reset var
+    const val = input.value;
+    button.style.display = "none";
+    input.style.display="none";
+  return val
+}
+async function get_a_token(auth_code) {
+  const body = {
+  'grant_type': 'authorization_code',
+  'code': auth_code,
+  'redirect_uri': redirect_uri,
+  'client_id': client_id,
+  'client_secret': client_secret
+}
+  var fetcher = await fetch("https://accounts.spotify.com/api/token",
+  {method:"POST",
+   body: new URLSearchParams(body),
+   headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }
+)
+  json = await fetcher.json()
+  console.log(json)
+  return json["access_token"]
+}
+async function get_playlists() {
+  response = await fetch("https://api.spotify.com/v1/me/playlists",{headers:{
+  'Authorization': 'Bearer ' + auth
+  }})
+  json = await response.json()
+  return json.items.map(playlist => [playlist.name, playlist.id])
+  
+}
+async function choose_playlist(playlists) {
+  console.log(playlists)
+  final = []
+    for (let i = 0; i < playlists.length; i++) {
+    final.push(playlists[i][0]);
+  }
+  pick = new picker("choose",final)
+  chooser = document.createElement("div")
+  document.body.append(chooser)
+  pick.render(chooser)
+
+  playlist = await pick.await_user_selected()
+  pick.destroy()
+  return playlists[playlist][1]
+}
+async function get_songs(id) {
+  playlist_url =  `https://api.spotify.com/v1/playlists/${id}/tracks`
+  response = await fetch(playlist_url,{headers:{
+  'Authorization': 'Bearer ' + auth
+  }})
+  json = await response.json()
+  songs = []
+  console.log(json)
+  json.items.forEach(x=>{
+    if (x.track.preview_url !== null) {songs.push([
+      x.track.name,x.track.preview_url,x.track.album.images[0].url
+    ])} 
+  })
+  return songs
+}
+function choose_songs(songs) {
+  
+  numItemsToChoose = 5;
+  chosenItems = [];
+
+  while (chosenItems.length < numItemsToChoose) {
+    const randomIndex = Math.floor(Math.random() * songs.length);
+    const randomItem = songs[randomIndex];
+    if (!chosenItems.includes(randomItem)) {
+      chosenItems.push(randomItem);
+    }
+  }
+  return chosenItems
+}
+async function song_picker(songs) {
+  var audio = new Audio(songs[0][1]);
+  audio.play();
+    
+  shuffled = shuffleArray(songs)
+  console.log(shuffled)
+  console.log(songs)
+  final = []
+  for (let i = 0; i < shuffled.length; i++) {
+    final.push("<img src='"+shuffled[i][2]+"' width='64px'><br>"+shuffled[i][0]);
+  }
+  picks = new picker("choose",final)
+  chooser = document.createElement("div")
+  chooser.style.display="flex";
+  document.body.append(chooser)
+  picks.render(chooser)
+
+  song = await pick.await_user_selected()
+  picks.destroy()
+  audio.pause()
+  audio.src=""
+  audio.currentTime = 0
+  return shuffled[song]
+}
+async function show_score(correct) {
+  console.log(correct)
+    prompt = document.getElementById("prompt")
+    console.log(prompt)
+    prompt.innerHTML = correct? '<i class="fa fa-check-circle-o" aria-hidden="true"></i>correct' : '<i class="fa fa-times-circle-o" aria-hidden="true"></i>incorrect'
+    await pause(1500)
+    prompt.innerHTML = ""
+}
+function shuffleArray(array) {
+  x=[]
+  array.forEach(y=>{x.push(y)})
+  x.sort(() => Math.random() - 0.5);
+  return x;
+}</script>
+
+  <!--
+  This script places a badge on your repl's full-browser view back to your repl's cover
+  page. Try various colors for the theme: dark, light, red, orange, yellow, lime, green,
+  teal, blue, blurple, magenta, pink!
+  -->
+</body>
+
+</html>
