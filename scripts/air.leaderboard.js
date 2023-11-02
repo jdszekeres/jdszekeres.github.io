@@ -3,7 +3,7 @@ const currentGameID = 'airportgame-jdszekeres';
 const add_lb = () => {
   uname = prompt("Username","anymous");
   
-  setData(uname,total);
+  setData(uname,guessed.length);
   show();
 }
 const setData = async (userName, userScore) => {
