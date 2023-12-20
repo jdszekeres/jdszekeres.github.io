@@ -1,8 +1,331 @@
-<!doctypehtml><html lang="en"><meta charset="utf-8"><meta name="viewport"content="width=device-width"><meta name="description"content="A cool site that can store your grades and allows you to do final grade calculations."><title>Aeries Parse</title><style>body,html{height:100%;width:100%;overflow:hidden}#input,#manage,#start{width:100%;height:100%;z-index:2;position:sticky}#start{display:block}#input{display:none}#manage{display:none}.center{width:100%;height:100%;display:flex;justify-content:center;align-items:center}#start .center button{background:linear-gradient(to bottom,#77b55a 5%,#72b352 100%);background-color:#77b55a;border-radius:4px;border:1px solid #4b8f29;display:inline-block;cursor:pointer;color:#fff;font-family:Arial;font-size:27px;font-weight:700;padding:32px 76px;text-decoration:none}#start h1{position:absolute;width:100%;top:40px;text-align:center}#start h2{position:absolute;width:100%;top:80px;text-align:center}#input h1{text-align:center;width:100%}#input input[type=number]{display:block;margin:auto;width:500px;padding:15px;font-size:21px;border-width:2px;border-color:#ccc;background-color:#fff;color:#000;border-style:double;border-radius:18px;box-shadow:0 0 5px rgba(66,66,66,.75);text-align:center}#input #text_input_holder{display:flex;width:100%;flex-wrap:wrap;justify-content:center}#input #text_input_holder .input-div{width:33.33%;height:150px;background-color:#dcdcdc;padding:5px;margin:10px;overflow:scroll}#input #submit{box-shadow:inset 0 1px 3px 0 #91b8b3;background:linear-gradient(to bottom,#768d87 5%,#6c7c7c 100%);background-color:#768d87;border-radius:5px;border:1px solid #566963;cursor:pointer;color:#fff;font-family:Arial;font-size:20px;font-weight:700;padding:11px 23px;text-decoration:none;text-shadow:0 -1px 0 #2b665e;display:block;margin:auto}#manage{display:flex;flex-wrap:wrap;overflow:scroll}#manage h1{width:100%;display:block;text-align:center}.manager{width:45%;margin:auto}.manager h1{display:block}table{border:1px solid #dededf;height:calc(100% - 100px);width:100%;table-layout:fixed;border-collapse:collapse;border-spacing:1px;text-align:left}th{border:1px solid #dededf;background-color:#eceff1;color:#000;padding:5px;height:35px!important}td{border:1px solid #dededf;background-color:#fff;color:#000;padding:5px;overflow:hidden;text-overflow:ellipsis;word-wrap:break-word;line-height:1em;max-height:2em}td:empty{border:0 solid transparent}footer{position:fixed;bottom:0;font-size:11px;z-index:1}br{z-index:-100}dialog{z-index:10;overflow:scroll}dialog::-webkit-scrollbar{display:none}dialog h1,h2{width:100%;text-align:center}dialog button{z-index:11;min-width:100px;max-width:50%;height:75px;margin:5px;background:#b2b6b8;background-image:-webkit-linear-gradient(top,#b2b6b8,#717f87);background-image:-moz-linear-gradient(top,#b2b6b8,#717f87);background-image:-ms-linear-gradient(top,#b2b6b8,#717f87);background-image:-o-linear-gradient(top,#b2b6b8,#717f87);background-image:linear-gradient(to bottom,#b2b6b8,#717f87);-webkit-border-radius:50;-moz-border-radius:50;border-radius:10px;color:#383838;font-size:20px;padding:5px 0 5px 0;border:solid #1f628d 1px;text-decoration:none}#close_btn{position:absolute;top:0;right:0;background-color:transparent;padding:0;background:0 0;width:25px;height:25px;z-index:100!important;font-size:20px}</style><div id="start"><h1>Aeries&copy;</h1><h2>Lacks Funcionality</h2><br><div class="center"><button id="start-button">Fix That</button></div></div><div id="input"><h1>Input your data</h1><input type="number"min="4"max="10"placeholder="How many classes do you have?"id="num_class"><div id="text_input_holder"></div><br><input type="button"value="Submit"id="submit"></div><div id="manage"></div><br><br><br><br><br><br><br><br><br><br><br><br><footer><p>Made by <a href="https://jdszekeres.is-a.dev">jdszekeres</a></p><span title="Copyright 2023 Jackson Szekeres Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.">Copyright Jackson Szekeres 2023. All rights reserved. (Hover for more)</span><br>By using this program you agree to not abuse any of the tools provided or use this program for malicious purposes.<br>This system is not intended to by a standalone SIS platform, but instead allows for a user to import and view of existing data and apply data analysis to it to imporve academic rigour as opposed to harm it. Aeries is a copyright of Aeries Software.</footer><script>const inputText="Copy the entire grading page of Aeries Gradebook for |th class";function start(){document.getElementById("start-button").addEventListener("click",()=>{(localStorage.hasOwnProperty("data")&&confirm("You already have data loaded. Do you want to use that?")?manage:showInput)()})}function showInput(){var e=document.getElementById("start"),t=document.getElementById("manage"),n=document.getElementById("input");e.style.display="none",t.style.display="none",n.style.display="block";const a=document.getElementById("num_class"),r=document.getElementById("text_input_holder");a.addEventListener("input",()=>{r.innerHTML="";var t=a.value;for(let e=0;e<t;e++){var n=document.createElement("div");n.contentEditable=!0,n.className="input-div",n.id="class-"+(e+1),n.appendChild(document.createTextNode(inputText.replace("|",e+1))),r.appendChild(n)}}),document.getElementById("submit").addEventListener("click",manage)}function arr2tbl(e){var t=document.createElement("table");for(row in t.innerHTML="<tr><th>Category</th><th>% of Grade</th><th>points</th><th>max</th><th>Percent</th><th>Grade</tr>",e){var n=document.createElement("tr");for(col in e[row]){var a=document.createElement("td");a.appendChild(document.createTextNode(e[row][col])),n.appendChild(a)}t.appendChild(n)}return t}function manage(){var e=document.getElementById("start"),t=document.getElementById("manage"),n=document.getElementById("input");e.style.display="none",t.style.display="flex",n.style.display="none",t.innerHTML="<h1>View Grades</h1>";let a=[];if(localStorage.data)a=JSON.parse(localStorage.data);else{for(let e=0;e<document.getElementsByClassName("input-div").length;e++){var r=document.getElementById("class-"+(e+1));r.innerHTML!==inputText.replace("|",e+1)&&(r=parseAeriesGarbage(r.innerHTML),a.push(r))}localStorage.setItem("data",JSON.stringify(a))}ind=-1;for(const m of a){ind++;var l,o,d,i,c=document.createElement("div");c.className="manager",null===m?(l=parseInt(ind)/2*2,c.appendChild(document.createTextNode("Free Period")),c.addEventListener("click",()=>{table_funcs(l)}),document.getElementById("manage").appendChild(c)):(c.id=m.name,(o=arr2tbl(m.grades)).addEventListener("click",table_funcs),(d=document.createElement("h2")).appendChild(document.createTextNode(m.name.replace(/\\/g,""))),(i=document.createElement("h3")).appendChild(document.createTextNode(m.teacher||"")),c.appendChild(d),c.appendChild(i),c.appendChild(o),document.getElementById("manage").appendChild(c))}for(let e=0;e<10;e++){var s=document.createElement("div");s.style.width="100%",s.style.height="20px",s.style["z-index"]=-1,document.getElementById("manage").appendChild(s)}}function table_funcs(n){if("number"!=typeof n){if(element=n.srcElement,row=element.parentElement,table=row.parentElement,"manager"!==(div=table.parentElement).className)return void console.log("weird select")}else element=null,row={children:[{innerText:"Free Period"}]},table=null,div={children:[{innerText:"Free Period"}]};modal=document.createElement("dialog");var e=document.createElement("h1"),t=(e.appendChild(document.createTextNode("Options")),document.createElement("h2")),a=(t.append(document.createTextNode("Options for "+row.children[0].innerText)),document.createElement("button")),r=(a.appendChild(document.createTextNode("See how test impacts grade")),a.addEventListener("click",function(){var e=prompt("How many points is this test?",100);if(void 0===parseFloat(e))alert("invalid points");else{var t=prompt("How much did you get on this test?",90);if(void 0===parseFloat(e))alert("invalid points");else{e=parseFloat(e),t=parseFloat(t),current_max=parseFloat(row.children[3].innerText),current_score=parseFloat(row.children[2].innerText),final_max=e+current_max,final_score=t+current_score,new_calc=0,length=table.children.length;for(let e=0;e<length-1;e++){var n=table.children[e];n instanceof HTMLTableSectionElement?console.log("found expected tbody element"):n.children[0].innerText!==row.children[0].innerText&&("0"===n.children[3].innerText?(console.log("found zero point category"),new_calc+=parseFloat(n.children[1].innerText.replace("%",""))/100):new_calc+=parseFloat(n.children[1].innerText.replace("%",""))/100*(parseFloat(n.children[2].innerText)/parseFloat(n.children[3].innerText)))}new_calc+=parseFloat(row.children[1].innerText.replace("%",""))/100*(final_score/final_max),alert(`
-            Your current grade in the category: ${(current_score/current_max*100).toFixed(2)}%
-            Your test score: ${(t/e*100).toFixed(2)}%
-            Your new grade in the category: ${(final_score/final_max*100).toFixed(2)}%
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <meta name="description" content="A cool site that can store your grades and allows you to do final grade calculations."> <title>Aeries Parse</title> <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAACMuAAAjLgAAAAAAAAAAAACWVAvL3Mau////////////9/Ls/6hxNP+STQD/k08D/5NPA/+TTwP/k08D/5JNAf+jaSn/9O3l///////////KkUwA/r+Waf///v7////////////AmW3/kEoA/5FMAP+RTAD/kUwA/5FMAP+PSQD/uY1d//79/P///////////pJNAP+jaSj/8+vi////////////59jH/76UZv+9lGX/vZRl/72UZf+9lGX/vZNk/+LQvP////////////////+TTwP/lFEG/9nBpv/////////////////////////////////////////////////////////////////q6vj/k08D/5FMAP+4jFr//fz7////////////////////////////////////////////////////////////qKbj/5NPA/+STgH/n2If/+/k2f////////////jz7v/cxq7/2sKo/9rDqP/bxKv/9e7n////////////8vL7/2Fdzf+TTwP/k08D/5NPA//Tt5f////////////17uf/pW0u/5NOAv+TTwP/nmEd/+7j1////////////8rI7v8yLr7/k08D/5NPA/+RTAD/soJM//v59////////////7+Xav+RTAD/kUwA/7OET//8+vj///////////+Midv/Ih25/5NPA/+TTwP/kk4C/5tdF//q3c7////////////dyLD/lVMJ/5NOAv/Rs5P////////////u7vr/UEzI/yIduf+TTwP/k08D/5NPA/+STgH/zKyI////////////9O3l/6NqKf+bXBX/697Q////////////wcDr/ywovP8kH7r/k08D/5NPA/+TTwP/kk0A/615P//59fH////////+/v+8k2T/r3xE//v59v///////////4F+1/8iHbn/JSC6/5NPA/+TTwP/k08D/5NOAv+ZWBD/5dTC////////////3MWs/9Cykf///////////+no+P9IRMX/Ix65/yUguv+TTwP/k08D/5NPA/+TTwP/kk0A/8Whef////////////jz7v/17uf///////////+3tej/KSS7/yUguv8lILr/k08D/5NPA/+TTwP/k08D/5JNAP+ocTP/9vHr///////////////////////9/f7/dnPU/yIduf8lILr/JSC6/5NPA/6TTwP/k08D/5NPA/+TTwL/llQL/9/LtP//////////////////////4uH2/0A8w/8jHrn/JSC6/yUguv6TTwPLk08D/5NPA/+TTwP/k08D/5FMAP/Cm3D//////////////////////7Kw5/8nIrv/JSC6/yUguv8lILrLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==" rel="icon"> <style>html, body{ height:100%;width:100%;overflow:hidden;}#start, #input, #manage{ width:100%;height:100%;z-index:2;position:sticky;}#start{ display:block;}#input{ display:none;}#manage{ display:none;}.center{ width:100%;height:100%;display:flex;justify-content:center;align-items:center;}#start .center button{ background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);background-color:#77b55a;border-radius:4px;border:1px solid #4b8f29;display:inline-block;cursor:pointer;color:#ffffff;font-family:Arial;font-size:27px;font-weight:bold;padding:32px 76px;text-decoration:none;}#start h1{ position:absolute;width:100%;top:40px;text-align:center;}#start h2{ position:absolute;width:100%;top:80px;text-align:center;}#input h1{ text-align:center;width:100%;}#input input[type='number']{ display:block;margin:auto;width:500px;padding:15px;font-size:21px;border-width:2px;border-color:#CCCCCC;background-color:#FFFFFF;color:#000000;border-style:double;border-radius:18px;box-shadow:0px 0px 5px rgba(66, 66, 66, .75);text-align:center;}#input #text_input_holder{ display:flex;width:100%;flex-wrap:wrap;justify-content:center;}#input #text_input_holder .input-div{ width:33.33%;height:150px;background-color:rgb(220, 220, 220);padding:5px;margin:10px;overflow:scroll;}#input #submit{ box-shadow:inset 0px 1px 3px 0px #91b8b3;background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);background-color:#768d87;border-radius:5px;border:1px solid #566963;cursor:pointer;color:#ffffff;font-family:Arial;font-size:20px;font-weight:bold;padding:11px 23px;text-decoration:none;text-shadow:0px -1px 0px #2b665e;display:block;margin:auto;}#manage{ display:flex;flex-wrap:wrap;overflow:scroll;}#manage h1{ width:100%;display:block;text-align:center;}.manager{ width:45%;margin:auto;}.manager h1{ display:block;}table{ border:1px solid #dededf;height:calc(100% - 100px);width:100%;table-layout:fixed;border-collapse:collapse;border-spacing:1px;text-align:left;}th{ border:1px solid #dededf;background-color:#eceff1;color:#000000;padding:5px;height:35px !important;}td{ border:1px solid #dededf;background-color:#ffffff;color:#000000;padding:5px;overflow:hidden;text-overflow:ellipsis;word-wrap:break-word;line-height:1em; max-height:2em; }td:empty{ border:0px solid transparent;}footer{ position:fixed;bottom:0;font-size:11px;z-index:1;}br{ z-index:-100;}dialog{ z-index:10;overflow:scroll;}dialog::-webkit-scrollbar{ display:none;}dialog h1, h2{ width:100%;text-align:center;}dialog button{ z-index:11;min-width:100px;max-width:50%;height:75px;margin:5px;background:#b2b6b8;background-image:-webkit-linear-gradient(top, #b2b6b8, #717f87);background-image:-moz-linear-gradient(top, #b2b6b8, #717f87);background-image:-ms-linear-gradient(top, #b2b6b8, #717f87);background-image:-o-linear-gradient(top, #b2b6b8, #717f87);background-image:linear-gradient(to bottom, #b2b6b8, #717f87);-webkit-border-radius:50;-moz-border-radius:50;border-radius:10px;color:#383838;font-size:20px;padding:5px 0px 5px 0px;border:solid #1f628d 1px;text-decoration:none;}#close_btn{ position:absolute;top:0;right:0;background-color:transparent;padding:0px;background:transparent;width:25px;height:25px;z-index:100 !important;font-size:20px;}</style> </head> <body> <div id="start"> <h1>Aeries&copy;</h1> <h2>Lacks Funcionality</h2> <br> <div class="center"> <button id="start-button">Fix That</button> </div> </div> <div id="input"> <h1>Input your data</h1> <input type="number" min="4" max="10" placeholder="How many classes do you have?" id="num_class"> <div id="text_input_holder"> </div> <br> <input type="button" value="Submit" id="submit"> </div> <div id="manage"> </div> <br><br><br><br><br><br><br><br><br><br><br><br> <footer> <p>Made by <a href="https://jdszekeres.is-a.dev">jdszekeres</a></p> <span title="Copyright 2023 Jackson Szekeres Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."> Copyright Jackson Szekeres 2023. All rights reserved. (Hover for more)</span><br> By using this program you agree to not abuse any of the tools provided or use this program for malicious purposes.<br> This system is not intended to by a standalone SIS platform, but instead allows for a user to import and view of existing data and apply data analysis to it to imporve academic rigour as opposed to harm it. Aeries is a copyright of Aeries Software. </footer> <script>const inputText = "Copy the entire grading page of Aeries Gradebook for |th class";
+
+function start() {
+    const startButton = document.getElementById("start-button");
+    startButton.addEventListener("click", () => {
+        if (localStorage.hasOwnProperty("data")) {
+            const useData = confirm("You already have data loaded. Do you want to use that?");
+            useData ? manage() : showInput();
+        } else {
+            showInput();
+        }
+    });
+
+    // Additional event listeners can be added here if needed
+}
+start();
+function showInput() {
+    
+    const startElement = document.getElementById("start");
+    const manageElement = document.getElementById("manage");
+    const inputElement = document.getElementById("input");
+
+    startElement.style.display = "none";
+    manageElement.style.display = "none";
+    inputElement.style.display = "block";
+
+    const numbers = document.getElementById("num_class");
+    const holder = document.getElementById("text_input_holder");
+
+    numbers.addEventListener("input", () => {
+        holder.innerHTML = "";
+        const n = numbers.value;
+        for (let i = 0; i < n; i++) {
+            const div = document.createElement("div");
+            div.contentEditable = true;
+            div.className = "input-div";
+            div.id = `class-${i + 1}`;
+            div.appendChild(document.createTextNode(inputText.replace("|", i + 1)));
+            holder.appendChild(div);
+        }
+    });
+
+    const submit = document.getElementById("submit");
+    submit.addEventListener("click", manage);
+}
+
+function arr2tbl(array){
+    var table = document.createElement("table");
+    table.innerHTML = "<tr><th>Category</th><th>% of Grade</th><th>points</th><th>max</th><th>Percent</th><th>Grade</tr>";
+    for (row in array) {
+        var tr = document.createElement("tr");
+        for (col in array[row]) {
+
+            var td = document.createElement("td");
+            td.appendChild(document.createTextNode(array[row][col]));
+            tr.appendChild(td);
+        }
+        table.appendChild(tr);
+    }
+    return table;
+}
+
+function manage() {
+    const startElement = document.getElementById("start");
+    const manageElement = document.getElementById("manage");
+    const inputElement = document.getElementById("input");
+
+    startElement.style.display = "none";
+    manageElement.style.display = "flex";
+    inputElement.style.display = "none";
+    manageElement.innerHTML = "<h1>View Grades</h1>";
+
+    let datastore = [];
+
+    if (!localStorage["data"]) {
+        for (let i = 0; i < document.getElementsByClassName("input-div").length; i++) {
+            const elem = document.getElementById(`class-${i + 1}`);
+            if (elem.innerHTML !== inputText.replace("|", i + 1)) {
+                const table = parseAeriesGarbage(elem.innerHTML);
+                datastore.push(table);
+            }
+        }
+        localStorage.setItem("data", JSON.stringify(datastore));
+    } else {
+        datastore = JSON.parse(localStorage["data"]);
+    }
+    ind = -1;
+    for (const table of datastore) {
+        ind++;
+        const div = document.createElement("div");
+        div.className = "manager";
+        
+        if (table === null) {
+            var p = (parseInt(ind) / 2)*2;
+            div.appendChild(document.createTextNode("Free Period"));
+            div.addEventListener("click",()=>{table_funcs(p)})
+            document.getElementById("manage").appendChild(div);
+            
+            continue;
+        }
+        div.id = table.name;
+        const tableElem = arr2tbl(table.grades);
+        tableElem.addEventListener("click", table_funcs);
+
+        const h2 = document.createElement("h2");
+        h2.appendChild(document.createTextNode(table.name.replace(/\\/g, "")));
+
+        const h3 = document.createElement("h3");
+        h3.appendChild(document.createTextNode(table.teacher || ""));
+
+        div.appendChild(h2);
+        div.appendChild(h3);
+        div.appendChild(tableElem);
+
+        document.getElementById("manage").appendChild(div);
+        
+    }
+
+    for (let i = 0; i < 10; i++) {
+        const div = document.createElement("div");
+        div.style.width = "100%";
+        div.style.height = "20px";
+        div.style["z-index"] = -1;
+        document.getElementById("manage").appendChild(div);
+    }
+}
+
+function table_funcs(event) {
+    if (typeof event !== 'number') {
+        element = event.srcElement;
+        row = element.parentElement;
+        table = row.parentElement;
+        div = table.parentElement;
+        if (div.className !== "manager") {
+            console.log("weird select");
+            return;
+        }
+    } else {
+        element = null
+        row = {"children":[{"innerText":"Free Period"}]};
+        table = null;
+        div = {"children":[{"innerText":"Free Period"}]};
+    }
+    modal = document.createElement("dialog");
+
+    var header = document.createElement("h1");
+    header.appendChild(document.createTextNode("Options"));
+    var row_header = document.createElement("h2");
+    row_header.append(document.createTextNode(`Options for ${row.children[0].innerText}`));
+    var simulate_test = document.createElement("button");
+    simulate_test.appendChild(document.createTextNode("See how test impacts grade"));
+    simulate_test.addEventListener("click",function () {
+        var max = prompt("How many points is this test?",100);
+        if (parseFloat(max)===undefined) {
+            alert("invalid points");
+            return;
+        }
+        var score = prompt("How much did you get on this test?",90);
+        if (parseFloat(max)===undefined) {
+            alert("invalid points");
+            return;
+        }
+        max = parseFloat(max);
+        score = parseFloat(score);
+        current_max = parseFloat(row.children[3].innerText);
+        current_score = parseFloat(row.children[2].innerText);
+
+
+        final_max = max+current_max;
+        final_score = score+current_score;
+
+        new_calc = 0;
+        length = table.children.length;
+        for (let step=0; step < length -1 ; step++) {
+            let tr = table.children[step];
+            if (tr instanceof HTMLTableSectionElement) {
+                console.log("found expected tbody element");
+                continue;
+            } 
+
+            if (tr.children[0].innerText !== row.children[0].innerText) {
+                if (tr.children[3].innerText === '0') {
+                    console.log("found zero point category");
+                    new_calc += parseFloat(tr.children[1].innerText.replace("%",""))/100
+                    continue;
+                }
+
+                new_calc += parseFloat(tr.children[1].innerText.replace("%",""))/100 * (parseFloat(tr.children[2].innerText) / parseFloat(tr.children[3].innerText));
+            } 
+        }
+        new_calc += parseFloat(row.children[1].innerText.replace("%",""))/100 * (final_score/final_max);
+
+        alert(`
+            Your current grade in the category: ${((current_score/current_max)*100).toFixed(2)}%
+            Your test score: ${((score/max)*100).toFixed(2)}%
+            Your new grade in the category: ${((final_score/final_max)*100).toFixed(2)}%
 
             your previous total grade: ${table.children[table.children.length-1].children[4].innerText}
-            your new total grade: ${(100*new_calc).toFixed(2)}%
-        `)}}}),document.createElement("h2")),l=(r.append(document.createTextNode("Options for class "+div.children[0].innerText)),document.createElement("button")),o=(l.appendChild(document.createTextNode("Calculate final grade (using row "+row.children[0].innerText+")")),l.addEventListener("click",function(){var e,t=parseFloat(prompt("What grade do you want to get in the class?"));isNaN(t)?alert("Not a valid number"):(e=(t-(1-(e=parseFloat(row.children[1].innerText.replace("%",""))/100))*parseFloat(table.children[table.children.length-1].children[4].innerText.replace("%","")))/e,100<(e=Math.max(0,e))?alert("Not possible"):alert(`You need to get at least ${e.toFixed(2)}% on the final to get a ${t}% in this class`))}),document.createElement("button")),d=(o.appendChild(document.createTextNode("Update grades")),o.addEventListener("click",function(){modal_2=document.createElement("dialog");var e=document.createElement("button"),t=document.createElement("div");t.setAttribute("contenteditable",!0),index=-1;for(let e=0;e<document.getElementsByTagName("table").length;e++)table===document.getElementsByTagName("table")[e]&&(index=e);-1===index&&(index=n),t.innerText=inputText.replace("|",index+1),t.style="width:100%;height: 100px;overflow:scroll;",(submit_button=document.createElement("button")).appendChild(document.createTextNode("Submit")),submit_button.addEventListener("click",function(){var e;t.innerHTML!==inputText.replace("|",index+1)&&(e=parseAeriesGarbage(t.innerHTML),(current_localStorage=JSON.parse(localStorage.getItem("data")))[index]=e,localStorage.setItem("data",JSON.stringify(current_localStorage)),modal_2.close(),manage())}),e.innerHTML="&times;",e.addEventListener("click",function(){modal_2.close()}),e.style="position: absolute;top:0;right:0;background-color:transparent;border-color: transparent;font-size: 20px",modal_2.appendChild(e),modal_2.appendChild(t),modal_2.appendChild(submit_button),modal_2.show(),modal_2.style="border: none !important;border-radius: 5px;box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);padding: 1.6rem;width: 50%;height:50%;position:absolute;top: 25%; right: 0%;",document.body.appendChild(modal_2),this.parentNode.parentNode.removeChild(this.parentNode)}),document.createElement("button"));d.innerHTML="&times;",d.id="close_btn",d.addEventListener("click",function(){modal.close()}),d.style="position: absolute;top:0;right:0;background-color:transparent;border-color: transparent;font-size: 20px",modal.style="border: none !important;border-radius: 5px;box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);padding: 1.6rem;width: 50%;height:50%;position:absolute;top: 25%; right: 0%;",modal.appendChild(e),modal.appendChild(document.createElement("br")),"number"!=typeof n&&(modal.appendChild(t),modal.appendChild(a)),modal.appendChild(r),modal.appendChild(document.createElement("br")),"number"!=typeof n&&modal.appendChild(l),modal.appendChild(o),modal.appendChild(d),modal.show(),document.body.appendChild(modal)}function parseAeriesGarbage(e){var n=new DOMParser;let a=n.parseFromString(e,"text/html");if(0!==a.getElementsByTagName("table").length){1<a.getElementsByName("table").length&&(a=n.parseFromString(document.querySelector("#ctl00_MainContent_subGBS_assignmentsView > table:nth-child(4)").outerHTML,"text/html"));var r=[].map.call(a.querySelectorAll("tr"),e=>[].slice.call(e.querySelectorAll("td")).reduce((e,t,n)=>(e[n+1]=t.textContent,e),{}));let t=r.length-5;for(let e=0;e<r.length;e++)"Totals"==r[e][1]&&(t=e+2);return{grades:r=r.slice(t,r.length),name:a.querySelector("option[selected]").innerText,teacher:a.querySelector("#ctl00_MainContent_subGBS_lblTeacherName").innerText}}alert("One of the pages you pasted in was invalid")}start()</script>
+            your new total grade: ${(new_calc*100).toFixed(2)}%
+        `)
+        
+    }) // man that's hard to write in a short space
+
+    var table_header = document.createElement("h2");
+    table_header.append(document.createTextNode(`Options for class ${div.children[0].innerText}`));
+    var final_grade_button = document.createElement("button");
+    final_grade_button.appendChild(document.createTextNode("Calculate final grade (using row "+row.children[0].innerText+")"));
+    final_grade_button.addEventListener("click", function () {
+      var g = parseFloat(prompt("What grade do you want to get in the class?"));
+
+      if (isNaN(g)) { // Check for NaN using isNaN()
+        alert("Not a valid number");
+        return; // Exit the function if input is invalid
+      }
+
+      var w = parseFloat(row.children[1].innerText.replace("%", "")) / 100;
+
+      var c = parseFloat(table.children[table.children.length - 1].children[4].innerText.replace("%", ""));
+      
+      var F = (g - ((1 - w) * c)) / w;
+
+      F = Math.max(0, F);
+      if (F > 100) {
+          alert("Not possible");
+          return;
+      }
+      alert(`You need to get at least ${F.toFixed(2)}% on the final to get a ${g}% in this class`)
+      
+    });
+    var update_button = document.createElement("button");
+    update_button.appendChild(document.createTextNode("Update grades"));
+    update_button.addEventListener("click",function () {
+
+        modal_2 = document.createElement("dialog");
+        var close_button = document.createElement("button");
+        var div = document.createElement("div");
+        div.setAttribute("contenteditable",true);
+        index=-1;
+        for (let i=0; i < document.getElementsByTagName("table").length;i++) {
+            if (table === document.getElementsByTagName("table")[i]) {
+                index = i;
+            }
+        }
+        if (index === -1) {
+            index = event;//last chance
+        }
+        div.innerText = inputText.replace("|",index+1);
+        div.style="width:100%;height: 100px;overflow:scroll;"
+        submit_button = document.createElement("button");
+        submit_button.appendChild(document.createTextNode("Submit"));
+        
+        submit_button.addEventListener("click",function () {
+            if (div.innerHTML !== inputText.replace("|",(index+1))) {
+                var new_table = parseAeriesGarbage(div.innerHTML);
+                current_localStorage = JSON.parse(localStorage.getItem("data"));
+                current_localStorage[index] = new_table;
+                localStorage.setItem("data",JSON.stringify(current_localStorage));
+                modal_2.close();
+                manage();
+            }
+        })
+        close_button.innerHTML = "&times;";
+        close_button.id="close_btn"
+        close_button.addEventListener("click",function () {
+            modal_2.close();
+        })
+        close_button.style="position: absolute;top:0;right:0;background-color:transparent;border-color: transparent;font-size: 20px";
+        modal_2.appendChild(close_button);
+        modal_2.appendChild(div);
+        modal_2.appendChild(submit_button);
+        modal_2.show();
+        modal_2.style="border: none !important;border-radius: 5px;box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);padding: 1.6rem;width: 50%;height:50%;position:absolute;top: 25%; right: 0%;"
+
+        document.body.appendChild(modal_2);
+        this.parentNode.parentNode.removeChild(this.parentNode);
+    })
+    var close_button = document.createElement("button");
+    close_button.innerHTML = "&times;";
+    close_button.id="close_btn";
+    close_button.addEventListener("click",function () {
+        modal.close();
+    })
+    close_button.style="position: absolute;top:0;right:0;background-color:transparent;border-color: transparent;font-size: 20px";
+    modal.style="border: none !important;border-radius: 5px;box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);padding: 1.6rem;width: 50%;height:50%;position:absolute;top: 25%; right: 0%;"
+    
+    modal.appendChild(header);
+    modal.appendChild(document.createElement("br"));
+    if (typeof event !== 'number') {
+        modal.appendChild(row_header);
+        modal.appendChild(simulate_test);
+    }
+    modal.appendChild(table_header);
+    modal.appendChild(document.createElement("br"));
+    if (typeof event !== 'number') {
+        modal.appendChild(final_grade_button);
+    }
+    modal.appendChild(update_button);
+    modal.appendChild(close_button);
+    modal.show();
+    document.body.appendChild(modal);
+}
+
+
+function parseAeriesGarbage(text) {
+    const parser = new DOMParser();
+    let html = parser.parseFromString(text, "text/html");
+
+    if (html.getElementsByTagName("table").length !== 0) {
+        if (html.getElementsByName("table").length > 1) {
+            html = parser.parseFromString(document.querySelector("#ctl00_MainContent_subGBS_assignmentsView > table:nth-child(4)").outerHTML, "text/html");
+        }
+
+        var obj = [].map.call(html.querySelectorAll('tr'), (tr) => {
+            return [].slice.call(tr.querySelectorAll('td')).reduce((a, b, i) => {
+                return (a[i + 1] = b.textContent, a);
+            }, {});
+        });
+
+        let end = obj.length - 5;
+        for (let i = 0; i < obj.length; i++) {
+            if (obj[i][1] == "Totals") {
+                end = i + 2;
+            }
+        }
+
+        obj = obj.slice(end, obj.length);
+        return { grades: obj, name: html.querySelector("option[selected]").innerText, teacher: html.querySelector('#ctl00_MainContent_subGBS_lblTeacherName').innerText };
+    } else {
+        alert("One of the pages you pasted in was invalid");
+    }
+}</script> </body> </html>
