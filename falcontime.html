@@ -1,70 +1,70 @@
 <!doctypehtml><html lang=en><meta charset=UTF-8><meta content="width=device-width,initial-scale=1"name=viewport><title>Falcon Time View</title><style>h1{font-family:Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;text-align:center;font-size:45px;vertical-align:middle}.person{display:block;margin:5px;width:200px;font-size:28px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}.circle{width:16px;height:16px;display:inline-block;border-radius:50%;background-color:grey;margin-right:10px}.Loggedin{background-color:#90ee90!important}.hours{display:block!important;width:100%;text-align:center}.top{width:100%;text-align:center}#container{display:flex;flex-wrap:wrap;flex-direction:row;align-items:center;align-content:center;width:100%;height:100%}.PHR{color:#e9967a!important}.SDR{color:#00008b!important}.AVR{color:#8fbc8f!important}.top20{background-color:rgba(144,238,144,.411)}</style><h1><img src=https://static.wixstatic.com/media/b46766_7bdb1070a7354b4393d1a759b3f81e71~mv2_d_1504_1860_s_2.png/v1/crop/x_9,y_15,w_1470,h_1826/fill/w_48,h_58,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/b46766_7bdb1070a7354b4393d1a759b3f81e71~mv2_d_1504_1860_s_2.png>Hours</h1><div id=container></div><script>const api = "AIzaSyCtpEW-xu38_uBirzfKie_rsGpfkhlaaiY";
-    const sheetId = "1Zo2Mxk8lYDTcNi0bd-UMcLNFOMuEm_znvcVozGyB1ek";
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Hours!A1:E1000?key=${api}`;
-    const blacklistRows = ["Name","PHR Hour Requirement","PHR Pacing (Rough)","PHR Not Possible","SDR Hour Requirement","SDR Pacing (Rough)","SDR Not Possible","AVR Hour Requirement","AVR Pacing (Rough)","AVR Not Possible","Total Possible","Total Possible","Total Possible",""," ."];
-    const PHR_COLOR = "PHR";
-    const SDR_COLOR = "SDR";
-    const AVR_COLOR = "AVR"; 
-    let phr_value = 0;
-    let sdr_value = 0;
-    let avr_value = 0;
-    const htmlBuilder = `
-    <div class="person {color} {top20}">
-        <div class="top"><span class="circle {status}"></span>{name}</div>
-        <span class="hours">{hours}</span>
-    </div>
-    `;
+const sheetId = "1Zo2Mxk8lYDTcNi0bd-UMcLNFOMuEm_znvcVozGyB1ek";
+const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Hours!A1:E1000?key=${api}`;
+const blacklistRows = ["Name","PHR Hour Requirement","PHR Pacing (Rough)","PHR Not Possible","SDR Hour Requirement","SDR Pacing (Rough)","SDR Not Possible","AVR Hour Requirement","AVR Pacing (Rough)","AVR Not Possible","Total Possible","Total Possible","Total Possible",""," .","Total Possible 1"];
+const PHR_COLOR = "PHR";
+const SDR_COLOR = "SDR";
+const AVR_COLOR = "AVR"; 
+let phr_value = 0;
+let sdr_value = 0;
+let avr_value = 0;
+const htmlBuilder = `
+<div class="person {color} {top20}">
+    <div class="top"><span class="circle {status}"></span>{name}</div>
+    <span class="hours">{hours}</span>
+</div>
+`;
+
+async function updateScores() {
     
-    async function updateScores() {
+    const resp = await fetch(url);
+    const json = await resp.json();
+    let values = json["values"];
+    values.forEach(function (row) {
+        d = row[0];
+        if (d == "PHR Hour Requirement") {
+            phr_value = parseFloat(row[4]);
+        }
+        if (d == "SDR Hour Requirement") {
+            sdr_value = parseFloat(row[4]);
+        } 
+        if (d == "AVR Hour Requirement") {
+            avr_value = parseFloat(row[4]);
+        }
+    });
+    values = values.filter((x)=>{return !blacklistRows.includes(x[0])})
+    top20 = Array.from(values);
+    top20.sort((a,b)=>(parseFloat(b[4]) - parseFloat(a[4])));
+    top20 = top20.map(x=>x[0]);
+    top20 = top20.slice(0,20);
+    console.log(top20);
+    values.sort((a,b)=>(parseFloat(b[4]) + (b[1] === "Logged in"? 1000:0)) - (parseFloat(a[4])+(a[1] === "Logged in"? 1000:0)));
+    document.getElementById("container").innerHTML = "";
+    values.forEach(person => {
         
-        const resp = await fetch(url);
-        const json = await resp.json();
-        let values = json["values"];
-        values.forEach(function (row) {
-            d = row[0];
-            if (d == "PHR Hour Requirement") {
-                phr_value = parseFloat(row[4]);
-            }
-            if (d == "SDR Hour Requirement") {
-                sdr_value = parseFloat(row[4]);
-            } 
-            if (d == "AVR Hour Requirement") {
-                avr_value = parseFloat(row[4]);
-            }
-        });
-        values = values.filter((x)=>{return !blacklistRows.includes(x[0])})
-        top20 = Array.from(values);
-        top20.sort((a,b)=>(parseFloat(b[4]) - parseFloat(a[4])));
-        top20 = top20.map(x=>x[0]);
-        top20 = top20.slice(0,20);
-        console.log(top20);
-        values.sort((a,b)=>(parseFloat(b[4]) + (b[1] === "Logged in"? 1000:0)) - (parseFloat(a[4])+(a[1] === "Logged in"? 1000:0)));
-        document.getElementById("container").innerHTML = "";
-        values.forEach(person => {
-            
-            html = htmlBuilder
-            .replace("{status}",person[1].replace(" ",""))
-            .replace("{name}",person[0])
-            .replace("{hours}",person[2]);
-            person[3] = parseFloat(person[4]);
-            if (person[4] >= avr_value) {
-                html = html.replace("{color}",AVR_COLOR);
-            } else if (person[4] >= sdr_value) {
-                html = html.replace("{color}",SDR_COLOR);
-            } else if (person[4] >= phr_value) {
-                html = html.replace("{color}",PHR_COLOR);
-            } else {
-                html = html.replace("{color}","");
-            }
-            if (top20.includes(person[0])) {
-                html = html.replace("{top20}","top20");
-            } else {
-                html.replace("{top20}","");
-            }
-            document.getElementById("container").innerHTML += html;
-        });
-    }
-    
-    updateScores();
-    
-    setInterval(updateScores, 15_000);</script>
+        html = htmlBuilder
+        .replace("{status}",person[1].replace(" ",""))
+        .replace("{name}",person[0])
+        .replace("{hours}",person[2]);
+        person[3] = parseFloat(person[4]);
+        if (person[4] >= avr_value) {
+            html = html.replace("{color}",AVR_COLOR);
+        } else if (person[4] >= sdr_value) {
+            html = html.replace("{color}",SDR_COLOR);
+        } else if (person[4] >= phr_value) {
+            html = html.replace("{color}",PHR_COLOR);
+        } else {
+            html = html.replace("{color}","");
+        }
+        if (top20.includes(person[0])) {
+            html = html.replace("{top20}","top20");
+        } else {
+            html.replace("{top20}","");
+        }
+        document.getElementById("container").innerHTML += html;
+    });
+}
+
+updateScores();
+
+setInterval(updateScores, 15_000);</script>
