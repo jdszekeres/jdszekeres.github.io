@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Countdown Timer</title>
+<style>.container{text-align:center;margin:auto;width:50%;height:50%}.timer{font-size:3rem;color:#333;margin-bottom:20px}.timer span{display:inline-block;width:50px;margin-right:10px}button{padding:10px 20px;background-color:#4caf50;color:#fff;border:none;border-radius:5px;cursor:pointer}#pause{background-color:#f44336}input{width:100px;margin:2px;padding:5px}input::placeholder{text-align:center}#all{display:flex;justify-content:center;align-content:center;align-items:center;width:100vw;height:100vh}</style>
+</head>
+<body>
+  <div id="all">
+  <div class="container">
+    <h1>👑Lord Leal's Ticking Countdown Timer👑</h1>
+    <br><br>
+    <input type="number" name="hours" inputmode="numeric" id="hours" placeholder="Hours" min="0" max="23">:
+    <input type="number" name="minutes" inputmode="numeric" id="minutes" placeholder="Minutes" min="0" max="59">:
+    <input type="number" name="seconds" inputmode="numeric" id="seconds" placeholder="Seconds" min="0" max="59">
+
+    <div class="timer">
+      <span class="hours">00</span>:
+      <span class="minutes">00</span>:
+      <span class="seconds">00</span>
+    </div>
+    <button id="start">Start</button>
+    <button id="pause">Pause</button>
+    <button id="reset">Reset</button>
+  </div>
+</div>
+  <script>const timerContainer=document.querySelector(".timer"),hoursSpan=timerContainer.querySelector(".hours"),minutesSpan=timerContainer.querySelector(".minutes"),secondsSpan=timerContainer.querySelector(".seconds"),startButton=document.getElementById("start"),pauseButton=document.getElementById("pause"),resetButton=document.getElementById("reset"),hoursInput=document.getElementById("hours"),minutesInput=document.getElementById("minutes"),secondsInput=document.getElementById("seconds");let tick=new Audio,alarm=new Audio;alarm.volume=.75,alarm.src="alarm.mp3",tick.src="tick.wav";let timerInterval=null,remainingTime=0;function startTimer(){0===remainingTime&&(remainingTime=3600*parseInt(hoursInput.value||0)+60*parseInt(minutesInput.value||0)+parseInt(secondsInput.value||0)),updateTimerDisplay(),0!==remainingTime&&(timerInterval=setInterval(()=>{remainingTime--,updateTimerDisplay(),remainingTime<=0?(alarm.play(),clearInterval(timerInterval)):tick.play()},1e3))}function pauseTimer(){clearInterval(timerInterval),alarm.pause()}function resetTimer(){alarm.pause(),remainingTime=3600*parseInt(hoursInput.value||0)+60*parseInt(minutesInput.value||0)+parseInt(secondsInput.value||0),updateTimerDisplay(),clearInterval(timerInterval)}function updateTimerDisplay(){let e=Math.floor(remainingTime/3600),t=Math.floor(remainingTime%3600/60),n=remainingTime%60;hoursSpan.textContent=e.toString().padStart(2,"0"),minutesSpan.textContent=t.toString().padStart(2,"0"),secondsSpan.textContent=n.toString().padStart(2,"0")}startButton.addEventListener("click",startTimer),pauseButton.addEventListener("click",pauseTimer),resetButton.addEventListener("click",resetTimer);</script>
+</body>
+</html>
