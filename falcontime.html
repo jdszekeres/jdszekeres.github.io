@@ -31,7 +31,7 @@
         hours = Math.floor(num);
         minutes = (num-hours)*60;
         seconds = (minutes-Math.floor(minutes))*60;
-        return `${hours}:${("0"+Math.floor(minutes)).slice(-2)}:${("0"+Math.round(seconds)).slice(-2)}`
+        return `${hours}:${("0"+Math.floor(minutes)).slice(-2)}:${("0"+Math.round(seconds)).slice(-2)}*`
     }
     async function updateScores() {
         
