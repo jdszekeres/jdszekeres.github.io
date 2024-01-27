@@ -1,6 +1,97 @@
-<!doctypehtml><html lang=en><meta charset=UTF-8><meta content="width=device-width,initial-scale=1"name=viewport><title>Falcon Time View</title><style>h1{font-family:Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;text-align:center;font-size:45px;vertical-align:middle}.person{display:block;margin:5px;width:200px;font-size:28px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}.circle{width:16px;height:16px;display:inline-block;border-radius:50%;background-color:grey;margin-right:10px}.Loggedin{background-color:#90ee90!important}.hours{display:block!important;width:100%;text-align:center}.top{width:100%;text-align:center}#container{display:flex;flex-wrap:wrap;flex-direction:row;align-items:center;align-content:center;width:100%;height:100%}.PHR{color:#e9967a!important}.SDR{color:#00008b!important}.AVR{color:#8fbc8f!important}.top20{background-color:rgba(144,238,144,.411)}</style><h1><img src=https://static.wixstatic.com/media/b46766_7bdb1070a7354b4393d1a759b3f81e71~mv2_d_1504_1860_s_2.png/v1/crop/x_9,y_15,w_1470,h_1826/fill/w_48,h_58,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/b46766_7bdb1070a7354b4393d1a759b3f81e71~mv2_d_1504_1860_s_2.png>Hours</h1><div id=container></div><script>const api="AIzaSyCtpEW-xu38_uBirzfKie_rsGpfkhlaaiY",sheetId="1Zo2Mxk8lYDTcNi0bd-UMcLNFOMuEm_znvcVozGyB1ek",url="https://sheets.googleapis.com/v4/spreadsheets/1Zo2Mxk8lYDTcNi0bd-UMcLNFOMuEm_znvcVozGyB1ek/values/Hours!A1:E1000?key=AIzaSyCtpEW-xu38_uBirzfKie_rsGpfkhlaaiY",blacklistRows=["Name","PHR Hour Requirement","PHR Pacing (Rough)","PHR Not Possible","SDR Hour Requirement","SDR Pacing (Rough)","SDR Not Possible","AVR Hour Requirement","AVR Pacing (Rough)","AVR Not Possible","Total Possible",""," .","Total Possible 1"],PHR_COLOR="PHR",SDR_COLOR="SDR",AVR_COLOR="AVR";let phr_value=0,sdr_value=0,avr_value=0;const htmlBuilder=`
+<!doctypehtml><html lang=en><meta charset=UTF-8><meta content="width=device-width,initial-scale=1"name=viewport><title>Falcon Time View</title><style>h1{font-family:Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;text-align:center;font-size:45px;vertical-align:middle}.person{display:block;margin:5px;width:200px;font-size:28px;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}.circle{width:16px;height:16px;display:inline-block;border-radius:50%;background-color:grey;margin-right:10px}.Loggedin{background-color:#90ee90!important}.hours{display:block!important;width:100%;text-align:center}.top{width:100%;text-align:center}#container{display:flex;flex-wrap:wrap;flex-direction:row;align-items:center;align-content:center;width:100%;height:100%}.PHR{color:#e9967a!important}.SDR{color:#00008b!important}.AVR{color:#8fbc8f!important}.top20{background-color:rgba(144,238,144,.411)}</style><h1><img src=https://static.wixstatic.com/media/b46766_7bdb1070a7354b4393d1a759b3f81e71~mv2_d_1504_1860_s_2.png/v1/crop/x_9,y_15,w_1470,h_1826/fill/w_48,h_58,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/b46766_7bdb1070a7354b4393d1a759b3f81e71~mv2_d_1504_1860_s_2.png>Hours</h1><div id=container></div><script>const api = "AIzaSyCtpEW-xu38_uBirzfKie_rsGpfkhlaaiY";
+    const sheetId = "1Zo2Mxk8lYDTcNi0bd-UMcLNFOMuEm_znvcVozGyB1ek";
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Hours!A1:E1000?key=${api}`;
+    const blacklistRows = ["Name","PHR Hour Requirement","PHR Pacing (Rough)","PHR Not Possible","SDR Hour Requirement","SDR Pacing (Rough)","SDR Not Possible","AVR Hour Requirement","AVR Pacing (Rough)","AVR Not Possible","Total Possible",""," .","Total Possible 1"];
+    const PHR_COLOR = "PHR";
+    const SDR_COLOR = "SDR";
+    const AVR_COLOR = "AVR"; 
+    let phr_value = 0;
+    let sdr_value = 0;
+    let avr_value = 0;
+    const htmlBuilder = `
     <div class="person {color} {top20}">
         <div class="top"><span class="circle {status}"></span>{name}</div>
         <span class="hours">{hours}</span>
     </div>
-    `;function exact_hours(e){console.log(e);let o=e.split(":");return console.log(o),console.log(parseInt(o[0])),console.log(parseInt(o[1])*(1/60)),console.log(parseInt(o[1])*(1/60)*(1/60)),parseInt(o[0])+parseInt(o[1])*(1/60)+parseInt(o[2])*(1/60)*(1/60)}async function updateScores(){let e=await fetch("https://sheets.googleapis.com/v4/spreadsheets/1Zo2Mxk8lYDTcNi0bd-UMcLNFOMuEm_znvcVozGyB1ek/values/Hours!A1:E1000?key=AIzaSyCtpEW-xu38_uBirzfKie_rsGpfkhlaaiY"),o=await e.json(),s=o.values;s.forEach(function(e){"PHR Hour Requirement"==(d=e[0])&&(phr_value=parseFloat(e[4])),"SDR Hour Requirement"==d&&(sdr_value=parseFloat(e[4])),"AVR Hour Requirement"==d&&(avr_value=parseFloat(e[4]))}),(top20=Array.from(s=(s=s.filter(e=>!blacklistRows.includes(e[0]))).map(e=>[e[0],"Logged out"===e[1],e[2],exact_hours(e[2])]))).sort((e,o)=>o[3]-e[3]);let a=(top20=top20.map(e=>e[0])).indexOf("Total Possible 1");a>-1&&top20.splice(a,1),top20=top20.slice(0,20),s.sort((e,o)=>o[3]+(o[1]?0:1e4)-(e[3]+(e[1]?0:1e4))),console.log(s),document.getElementById("container").innerHTML="",s.forEach(e=>{html=htmlBuilder.replace("{status}",e[1]?"Loggedout":"Loggedin").replace("{name}",e[0]).replace("{hours}",e[2]),html=e[3]>=avr_value?html.replace("{color}","AVR"):e[3]>=sdr_value?html.replace("{color}","SDR"):e[3]>=phr_value?html.replace("{color}","PHR"):html.replace("{color}",""),html=top20.includes(e[0])?html.replace("{top20}","top20"):html.replace("{top20}",""),document.getElementById("container").innerHTML+=html})}updateScores(),setInterval(updateScores,15e3);</script>
+    `;
+    
+    function exact_hours(string) {
+        console.log(string)
+        let split = string.split(":");
+        console.log(split);
+        console.log(parseInt(split[0]));
+        console.log(parseInt(split[1])*(1/60));
+        console.log(parseInt(split[1])*(1/60)*(1/60));
+        return (
+            parseInt(split[0]) + (parseInt(split[1]) * (1/60)) + (parseInt(split[2]) * (1/60) * (1/60))
+        )
+    }
+    function unparse(string) {
+        num = parseFloat(string);
+        hours = Math.floor(num);
+        minutes = (num-hours)*60;
+        seconds = (minutes-Math.floor(minutes))*60;
+        return `${hours}:${("0"+Math.floor(minutes)).slice(-2)}:${("0"+Math.round(seconds)).slice(-2)}`
+    }
+    async function updateScores() {
+        
+        const resp = await fetch(url);
+        const json = await resp.json();
+        let values = json["values"];
+        console.log(JSON.parse(JSON.stringify(values))[12]);
+        values.forEach(function (row) {
+            d = row[0];
+            if (d == "PHR Hour Requirement") {
+                phr_value = parseFloat(row[4]);
+            }
+            if (d == "SDR Hour Requirement") {
+                sdr_value = parseFloat(row[4]);
+            } 
+            if (d == "AVR Hour Requirement") {
+                avr_value = parseFloat(row[4]);
+            }
+        });
+    
+        
+        
+        values = values.filter((x)=>{return !blacklistRows.includes(x[0])})
+        values = values.map((x) =>{return [x[0],x[1] === "Logged out",x[2]!==""?x[2]:unparse(x[3]),x[2]!==""?exact_hours(x[2]):parseFloat(x[3])]});
+        top20 = Array.from(values);
+        
+        top20.sort((a,b)=>(b[3] - a[3]));
+        top20 = top20.map(x=>x[0]);
+        let b = top20.indexOf("Total Possible 1");
+        if (b > -1) {
+            top20.splice(b,1);
+        }
+        top20 = top20.slice(0,20);
+        values.sort((a,b)=>(b[3] + (b[1]?0:10000)) - (a[3] + (a[1]?0:10000)));
+        console.log(values);
+        document.getElementById("container").innerHTML = "";
+        values.forEach(person => {
+            
+            html = htmlBuilder
+            .replace("{status}",person[1]? "Loggedout" : "Loggedin")
+            .replace("{name}",person[0])
+            .replace("{hours}",person[2]);
+            if (person[3] >= avr_value) {
+                html = html.replace("{color}",AVR_COLOR);
+            } else if (person[3] >= sdr_value) {
+                html = html.replace("{color}",SDR_COLOR);
+            } else if (person[3] >= phr_value) {
+                html = html.replace("{color}",PHR_COLOR);
+            } else {
+                html = html.replace("{color}","");
+            }
+            if (top20.includes(person[0])) {
+                html = html.replace("{top20}","top20");
+            } else {
+                html = html.replace("{top20}","");
+            }
+            document.getElementById("container").innerHTML += html;
+        });
+    }
+    
+    updateScores();
+    
+    setInterval(updateScores, 15_000);</script>
