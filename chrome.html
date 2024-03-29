@@ -384,7 +384,7 @@
     
     (async function() {
         date = new Date()
-        document.getElementById("date").innerHTML =   `${date.getMonth()}/${date.getDay()}/${date.getYear()}`
+        document.getElementById("date").innerHTML =   `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`
         weird_resp = await fetch(WEIRD_HOLIDAYS_URL)
         json = await weird_resp.json()
         holidays = json.holidays
