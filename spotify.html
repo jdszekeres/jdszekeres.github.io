@@ -90,7 +90,7 @@ function return_chosen(chosen) {
   <script>const pause = async ms => new Promise(res => setTimeout(res, ms));
 const client_id = '1c82a5b0cf2447f0beb843e42d0d06e9'
 const client_secret = 'd333c0311fa348998e4e2cb247a447f3'
-const redirect_uri = 'https://spotifyauth.jdszekeres.repl.co/'
+const redirect_uri = 'https://jdszekeres.github.io/spotifyauth.html'
 const scopes = ['user-read-private', 'user-read-email','playlist-read-private']
 authorize_url = 'https://accounts.spotify.com/authorize?client_id=' + client_id + '&response_type=code&redirect_uri=' + redirect_uri +'&scope='+ scopes.join('%20')
 var headers;
