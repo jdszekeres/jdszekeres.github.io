@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPX Mile Marker Time Calculator</title>
+    <!-- Include FA and Petite Vue scripts -->
+    <script src="https://unpkg.com/petite-vue@0.2.2/dist/petite-vue.iife.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script type="module" src="scripts/strava.script.js"></script>
+    <link rel="stylesheet" href="resources/strava.style.css">   
+</head>
+<body>
+    <div id="app" v-scope>
+        <h1 class="head">
+            <i class="fa-sharp fa-solid fa-signs-post"></i>
+            Trail Markers
+            
+        </h1>
+        <h2 class="subhead">
+            Find Your Pace for sections of your workouts
+        </h2>
+
+        <div class="dropbox" @dragover="preventDefaultEnter" @dragend="preventDefaultExit" @drop="handleDragDrop">
+            Drop a GPX file here
+            <input type="file" @change="handleFileUpload" accept=".gpx" hidden/>
+        </div>
+        <div v-if="trackData">
+
+            
+            <br>
+            <div class="centerflex">
+                <h3>
+                    <i id="icon" class="fa-solid" :class=" trackMetadata['icon'] "></i>
+                    {{ trackMetadata['name'] }} ({{ (maxDistMarker / 5280).toFixed(2) }} mi)
+                </h3>
+                <label for="distMarkerInput">
+                    Enter A Mile Mark
+                    <input id="distMarkerInput" class="input" type="number" @change="makeSurePeopleDontGoTooHigh" />
+                    <span>miles</span>
+                </label>
+                <button @click="calculateTime">Calculate Time</button>
+                <span v-if="formattedTimeAtdistMarker">It took you {{ formattedTimeAtdistMarker }} to run {{ distMarker/5280 }} miles</span>
+            </div>
+        </div>
+
+        <a href="https://github.com/jdszekeres/trailMarkers" target="_blank" style="position:fixed;bottom:0;right:0">
+            <div style="width: 64px;height:64px;background-color:#5b34eb;display:flex;justify-content:center;align-items:center;border-radius: 50%">
+                <img src="https://jdszekeres.github.io/project-photos/github-mark-white.svg" width="50px" height="50px">
+                <!--Hey You, You want your own of these pop ups got to https://replit.com/@jdszekeres/createCodePopup-->
+            </div>
+        </a>
+</body>
+</html>
