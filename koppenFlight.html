@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Köppen Flights</title>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+    <style>*,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}html,:host{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dl,dd,h1,h2,h3,h4,h5,h6,hr,figure,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}ol,ul,menu{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}button,[role=button]{cursor:pointer}:disabled{cursor:default}img,svg,video,canvas,audio,iframe,embed,object{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]{display:none}*,:before,:after{--tw-border-spacing-x: 0;--tw-border-spacing-y: 0;--tw-translate-x: 0;--tw-translate-y: 0;--tw-rotate: 0;--tw-skew-x: 0;--tw-skew-y: 0;--tw-scale-x: 1;--tw-scale-y: 1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness: proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width: 0px;--tw-ring-offset-color: #fff;--tw-ring-color: rgb(59 130 246 / .5);--tw-ring-offset-shadow: 0 0 #0000;--tw-ring-shadow: 0 0 #0000;--tw-shadow: 0 0 #0000;--tw-shadow-colored: 0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x: 0;--tw-border-spacing-y: 0;--tw-translate-x: 0;--tw-translate-y: 0;--tw-rotate: 0;--tw-skew-x: 0;--tw-skew-y: 0;--tw-scale-x: 1;--tw-scale-y: 1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness: proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width: 0px;--tw-ring-offset-color: #fff;--tw-ring-color: rgb(59 130 246 / .5);--tw-ring-offset-shadow: 0 0 #0000;--tw-ring-shadow: 0 0 #0000;--tw-shadow: 0 0 #0000;--tw-shadow-colored: 0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }.mx-3{margin-left:.75rem;margin-right:.75rem}.my-10{margin-top:2.5rem;margin-bottom:2.5rem}.flex{display:flex}.h-16{height:4rem}.w-16{width:4rem}.w-44{width:11rem}.w-full{width:100%}.flex-row{flex-direction:row}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.rounded{border-radius:.25rem}.rounded-lg{border-radius:.5rem}.border{border-width:1px}.border-gray-900{--tw-border-opacity: 1;border-color:rgb(17 24 39 / var(--tw-border-opacity))}.bg-gray-50{--tw-bg-opacity: 1;background-color:rgb(249 250 251 / var(--tw-bg-opacity))}.bg-green-200{--tw-bg-opacity: 1;background-color:rgb(187 247 208 / var(--tw-bg-opacity))}.px-10{padding-left:2.5rem;padding-right:2.5rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-black{font-weight:900}.font-bold{font-weight:700}.underline{text-decoration-line:underline}</style>
+</head>
+<body>
+    <h1 class="font-mono font-bold text-3xl text-center font-black">
+        Köppen Flight
+    </h1>
+    <p class=" mx-3">
+        Have you ever looked out of the window on a plane and noticed the huge variety of terrain and geography out the window.
+        If so, here you can analyse in-depth the distribution of all <a href="https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification" class="underline">Köppen–Geiger climate zones</a> over the length of your flight.
+        To begin, enter any <a href="https://en.wikipedia.org/wiki/ICAO_airport_code" class="underline">airport ICAO code</a>.
+    </p>
+    <div class="flex flex-row px-10">
+        <div class="w-full mx-3 flex flex-col">
+            <label class="w-full text-center text-lg font-black">
+                From
+            </label>
+            <input class="bg-gray-50 border border-gray-900 rounded px-2 py-1 w-full" placeholder="KLAX" name="from"/>
+        </div>
+        <div class="w-full mx-3 flex flex-col">
+            <label class="w-full text-center text-lg font-black">
+                To
+            </label>
+            <input class="bg-gray-50 border border-gray-900 rounded px-2 py-1 w-full" placeholder="CYYZ" name="to"/>
+        </div>
+    </div>
+    <div class="flex w-full justify-center my-10">
+        <button class="px-5 py-3 bg-green-200 rounded-lg" onclick="loadFlights()">
+            Köppen
+        </button>
+    </div>
+    <div class="flex flex-row w-full justify-center">
+        <h1 class="color-grey-900 text-center font-mono font-bold text-xl font-black">
+            <span id="start-name">Starting Airport</span>
+            ⇨
+            <span id="end-name">Ending Airport</span>
+        </h1>
+        
+    </div>
+    <div id="zones" class="flex flex-row flex-wrap justify-center w-full"></div>
+    <script
+        const koppenUrl = 'https://raw.githubusercontent.com/rjerue/koppen-map/main/raw-data.json';
+        const icaoUrl = './resources/icaoCodes.json';
+        let koppenData = {};
+        let icaoData = [];
+        const colorZones = {
+                "ET Polar-Tundra": "#B2B2B2",
+                "EF Polar-Frost": "#686868",
+                "Aw Tropical-Savanna": "#46A9FA",
+                "BSh Arid-Steppe-Hot": "#F5A301",
+                "BWh Arid-Desert-Hot": "#FE0000",
+                "Af Tropical-Rainforest": "#0000FE",
+                "Dsa Cold-Dry_Summer-Hot_Summer": "#FF00FE",
+                "Am Tropical-Monsoon": "#0077FF",
+                "Dwa Cold-Dry_Winter-Hot_Summer": "#ABB1FF",
+                "BSk Arid-Steppe-Cold": "#FFDB63",
+                "Dwb Cold-Dry_Winter-Warm_Summer": "#5A77DB",
+                "Dfa Cold-Withouth_dry_season-Hot_Summer": "#00FFFF",
+                "Dfb Cold-Withouth_dry_season-Warm_Summer": "#38C7FF",
+                "Csb Temperate-Dry_Summer-Warm_Summer": "#C6C700",
+                "Dfc Cold-Withouth_dry_season-Cold_Summer": "#007E7D",
+                "Cfc Temperate-Withouth_dry_season-Cold_Summer": "#33C701",
+                "BWk Arid-Desert-Cold": "#FE9695",
+                "Cfa Temperate-Withouth_dry_season-Hot_Summer": "#C6FF4E",
+                "Cfb Temperate-Withouth_dry_season-Warm_Summer": "#66FF33",
+                "Csa Temperate-Dry_Summer-Hot_Summer": "#FFFF00",
+                "Dwc Cold-Dry_Winter-Cold_Summer": "#4C51B5",
+                "Dsb Cold-Dry_Summer-Warm_Summer": "#C600C7",
+                "Cwa Temperate-Dry_Winter-Hot_Summer": "#96FF96",
+                "Dsc Cold-Dry_Summer-Cold_Summer": "#963295",
+                "Cwb Temperate-Dry_Winter-Warm_Summer": "#63C764",
+                "Cwc Temperate-Dry_Winter-Cold_Summer": "#329633",
+                "Dfa Cold-Withouth_dry_season-Very_Cold_Winter": "#00FFFF",
+                "Dsd Cold-Dry_Summer-Very_Cold_Winter": "#966495",
+                "Dwd Cold-Dry_Winter-Very_Cold_Winter": "#320087"
+            }//we use it in tailwin config
+        function formatName(koppenZone) {
+            let [code, description] = koppenZone.split(" ");
+            description = description.replace(/[_|-]/gm, " ");
+
+            return `${code} - ${description}`;
+        }
+        function haversineDistance(coords1, coords2, isMiles=true) {
+          function toRad(x) {
+            return x * Math.PI / 180;
+          }
+
+          var lon1 = coords1[0];
+          var lat1 = coords1[1];
+
+          var lon2 = coords2[0];
+          var lat2 = coords2[1];
+
+          var R = 6371; // km
+
+          var x1 = lat2 - lat1;
+          var dLat = toRad(x1);
+          var x2 = lon2 - lon1;
+          var dLon = toRad(x2)
+          var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          var d = R * c;
+
+          if(isMiles) d /= 1.60934;
+
+          return d;
+        }//from https://stackoverflow.com/a/30316500
+
+        async function start() {
+            const koppenResponse = await fetch(koppenUrl);
+            koppenData = await koppenResponse.json();
+
+            const icaoResponse = await fetch(icaoUrl);
+            icaoData = await icaoResponse.json();
+
+
+
+        }
+
+        function findIntersectionPoints(lineCoords, polygonCoords) {
+            const line = turf.lineString(lineCoords);
+            const poly = turf.polygon(polygonCoords);
+
+            // Check if the line intersects the polygon
+            if (turf.booleanIntersects(line, poly)) {
+                // Find intersection points
+                const intersections = turf.lineIntersect(line, poly);
+                if (intersections.features.length > 0) {
+                    // Extract the coordinates of intersection points
+                    const intersectionPoints = intersections.features.map((feature) => {
+                        return feature.geometry.coordinates;
+                    });
+                    return intersectionPoints;
+                }
+            }
+
+            return []; // No intersections found
+        }
+
+        function loadFlights() {
+            const startICAO = document.querySelector('input[name="from"]').value;
+            const endICAO = document.querySelector('input[name="to"]').value;
+
+            let [start, end] = [{}, {}];
+
+            for (let i = 0; i < icaoData.length; i++) {
+                const icao = icaoData[i].icao;
+
+                if (icao === startICAO.toUpperCase()) {
+                    start = icaoData[i];
+                }
+                if (icao === endICAO.toUpperCase()) {
+                    end = icaoData[i];
+                }
+            }
+
+            const startCoordinates = [start.latitude, start.longitude].reverse();
+            const endCoordinates = [end.latitude, end.longitude].reverse();
+
+            const totalDistance = haversineDistance(startCoordinates, endCoordinates);
+
+            document.querySelector("#start-name").innerHTML = start.airport;
+            document.querySelector("#end-name").innerHTML = end.airport;
+
+            const line = [startCoordinates, endCoordinates];
+
+            intersections = testAllZones(line);
+            let zoneDistances = {}; // Track total distance within each zone
+
+            // Calculate total distance within each zone
+            intersections.forEach((instance) => {
+                const zoneName = instance.name;
+                const distance = instance.distance;
+                if (zoneDistances.hasOwnProperty(zoneName)) {
+                    zoneDistances[zoneName] += distance;
+                } else {
+                    zoneDistances[zoneName] = distance;
+                }
+            });
+
+            let htmlRenders = [];
+            const oceanicDistance = totalDistance - Object.values(zoneDistances).reduce((a, b) => a + b, 0);;
+            // Calculate percentage and render HTML
+            zoneDistances["XXX Ocean"] = oceanicDistance;
+            for (const zoneName in zoneDistances) {
+                if (zoneDistances.hasOwnProperty(zoneName)) {
+                    const distance = zoneDistances[zoneName];
+                    const percentage = (distance / totalDistance) * 100;
+                    htmlRenders.push(`
+                        <div class="flex flex-row mx-3">
+                            <div class="h-16 w-16 flex items-center justify-center" style="background-color: ${colorZones[zoneName]}">
+                                <span class="text-sm text-center">
+                                    ${distance.toFixed(1)} mi
+                                    <br>
+                                    ${percentage.toFixed(0)}%
+                                </span>
+                            </div>
+                            <span class="w-44">${formatName(zoneName)}</span>
+                        </div>
+                    `);
+                }
+            }
+
+            document.querySelector('#zones').innerHTML = htmlRenders.join('') + Array(
+                Object.values(zoneDistances).length%(Math.floor(document.body.clientWidth/240))
+            ).fill(`<div class="flex flex-row mx-3">
+                            <div class="h-16 w-16 flex items-center justify-center" style="background-color: undefined">
+                                <span class="text-sm text-center">
+
+                                    <br>
+
+                                </span>
+                            </div>
+                            <span class="w-44"></span>
+                        </div>`);
+        }
+
+
+        function testAllZones(line) {
+            let intersectedZones = []; //store all zone data and intersected points
+            for (let i = 0; i < koppenData.features.length; i++) {
+
+                const type = koppenData.features[i].properties.climate; //its name
+
+                const zone = koppenData.features[i]
+                const coords = zone.geometry.coordinates;
+
+                let intersections = findIntersectionPoints(line, coords);
+                if (intersections.length > 0) {
+                    if (intersections.length == 1) {//Starting and ending points only have one intersection point since they start within a zone
+                        const dist_to_start = haversineDistance(intersections[0], line[0]);
+                        const dist_to_end = haversineDistance(intersections[0], line[1]);
+
+                        if (dist_to_start < dist_to_end) {
+                            intersections.push(line[0]);
+                        } else {
+                            intersections.push(line[1])
+                        }
+
+                    }
+                    intersectedZones.push({
+                        intersections: intersections, 
+                        geojson: zone, 
+                        name: type,
+                        distance:haversineDistance(intersections[0],intersections[1])})
+                }
+            }
+            return intersectedZones;
+        }
+
+
+
+        start();
+
+    </script>
+</body>
+  <a href="https://github.com/jdszekeres/koppenFlights" target="_blank" style="position:fixed;bottom:0;right:0">
+    <div style="width: 64px;height:64px;background-color:#5b34eb;display:flex;justify-content:center;align-items:center;border-radius: 50%">
+        <img src="https://jdszekeres.github.io/project-photos/github-mark-white.svg" width="50px" height="50px">
+        <!--Hey You, You want your own of these pop-ups got to https://replit.com/@jdszekeres/createCodePopup-->
+    </div>
+</a>
+</html>
