@@ -1,0 +1,92 @@
+body {
+    margin: 0;
+    display: flex;
+    height: 100vh;
+    overflow: hidden
+}
+#left-sidebar,#middle-viewer,#right-sidebar {
+    margin: none;
+    padding: none;
+}
+#left-sidebar {
+    width: 200px;
+    background: #f0f0f0;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#middle-viewer {
+    flex: 1;
+    position: relative;
+}
+
+#right-sidebar {
+    width: 300px;
+    background: #f0f0f0;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+#material-manager {
+    flex: 1;
+
+}
+
+#cost-hours-manager {
+    /* height: 100px; */
+    margin-top: 10px;
+}
+
+
+.full-p {
+    width: 100%;
+    text-align: center;
+}
+label[for=material-width-slider], label[for=material-height-slider], label[for=material-depth-slider] {
+    width: 50px;
+    display: inline-block
+}
+#material-width, #material-height, #material-depth  {
+    width: 50px;
+}
+#pos {
+    
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+}
+#rot {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+}
+#pos p {
+    width: 100%;
+}
+#rot p {
+    width: 100%;
+}
+#pos input {
+    margin: 0;
+    width: 30%
+}
+#rot input {
+    margin: 0;
+    width: 30%
+}
+#rmenu {
+    position: absolute;
+}
+#rmenu ul {
+    width: 150px;
+    text-decoration: none;
+    list-style: none;
+    background-color: lightgray;
+}
+#rmenu ul a {
+    width: 100%;
+    color: black;
+    text-decoration: none;
+}
