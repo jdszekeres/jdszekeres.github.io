@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Real Estate</title>
+    <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAwMDAAAA/wArY3oAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAMRMAAgAAIAAxEwACAAAgADETAAIAACAAAzAAAgAAIAAAAAACAAAgAAAAAAIAACAAAAAAAgAAIAAAAAACAAAiIiIiIiIAACIiIiIiIgAAAiIiIiISAAAAIiIiIhIAAAACIiIiEgAAAAAiIgISAAAAAAIgAhIAAAAAAAACIgDcOwAA3DsAANw7AADeewAA3/sAAN/7AADf+wAA3/sAAMADAADAAwAA4AMAAPADAAD4AwAA/CMAAP5jAAD/4wAA">
+
+  <script type="module" crossorigin src="./assets/index-vJu5huJu.js"></script>
+  <link rel="stylesheet" crossorigin href="./style.css">
+</head>
+<body>
+    <div id="left-sidebar">
+        <!-- Material List -->
+        <p class="full-p">Materials</p>
+        <div id="materials-list">
+
+        </div>
+    </div>
+
+    <div id="middle-viewer">
+        <!-- 3D Viewer Container -->
+        <div id="3d-viewer">
+            <!-- Your 3D viewer content goes here -->
+        </div>
+    </div>
+
+    <div id="right-sidebar">
+        <div id="material-manager">
+            <!-- Material Manager (Paint, Size) -->
+            <h3>Material Manager</h3>
+            <h4 id="mat-name">None Selected</h4>
+            <div>
+                <label for="paint-color">Color:</label>
+                <div id="color-selector">
+                    
+                </div>
+            </div>
+            <div id="pos">
+                <p>Position:</p>
+                <input type="number" name="px" id="px" placeholder="x"/>
+                <input type="number" name="py" id="py" placeholder="y"/>
+                <input type="number" name="pz" id="pz" placeholder="z"/>
+            </div>
+            <div id="rot">
+                <p>Rotation:</p>
+                <input type="number" name="rx" id="rx" placeholder="x"/>
+                <input type="number" name="ry" id="ry" placeholder="y"/>
+                <input type="number" name="rz" id="rz" placeholder="z"/>
+            </div>
+            <div>
+                <p>Material Size:</p>
+                <br>
+                <label for="material-width-slider">Width: </label>
+                <input type="range" id="material-width-slider" min="1" max="100" value="1">
+                <span id="material-width"></span>
+
+                <br>
+                <label for="material-height-slider">Height: </label>
+                <input type="range" id="material-height-slider" min="1" max="100" value="1">
+                <span id="material-height"></span>
+                <br>
+                <label for="material-depth-slider">Depth: </label>
+                <input type="range" id="material-depth-slider" min="1" max="100" value="1">
+                <span id="material-depth"></span>
+            </div>
+        </div>
+
+        <div id="cost-hours-manager">
+            <!-- Cost and Man Hours Manager -->
+            <h3>Cost and Man Hours</h3>
+            <div>
+                <p>Total Cost: $0.00</p>
+                <p>Total Man Hours: 0</p>
+            </div>
+            <button id="download">
+                Download Scene
+            </button>
+        </div>
+    </div>
+
+    <div id="rmenu" style="display: none;">
+        <ul>
+            <li><a role="button" href="#">Load Terrain</a></li>
+    </div>
+    <!-- Add your JavaScript script tag here for interactivity -->
+
+</body>
+</html>
