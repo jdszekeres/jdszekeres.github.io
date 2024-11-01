@@ -1,0 +1,133 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>
+            Today is a <span id="type"></span><br>
+            <span id="period"></span> <span id="delim"></span> at <span id="when"></span>
+        </h1>
+    </body>
+    <script>
+        const date = new Date().toISOString().slice(0,11);
+        const homeroom_dates = ['2024-8-15', '2024-8-22', '2024-8-29', '2024-9-5', '2024-9-12', '2024-9-26', '2024-10-3', '2024-10-18', '2024-10-24', '2024-10-31', '2024-11-7', '2024-11-21', '2024-12-5', '2024-12-12','2025-1-9', '2025-1-16','2025-1-23','2025-2-6','2025-2-13','2025-2-20','2025-2-28', '2025-3-6', '2025-3-13', '2025-3-27', '2025-4-17','2025-5-1','2025-5-8','2025-5-15']
+        const late_start_dates = ['2024-8-21', '2024-9-4', '2024-9-18', '2024-10-2', '2024-10-16', '2024-10-30', '2024-11-13', '2024-11-20', '2024-12-11', '2025-1-15', '2025-1-22', '2025-2-19', '2025-3-19', '2025-3-26', '2025-4-16', '2025-4-23', '2025-4-30', '2025-5-14', '2025-5-21']
+        const extended_lunch_dates = ['2024-9-20', '2024-11-15', '2025-4-25', '2025-5-23'];
+        const finals_day_1_dates = ['2024-10-10', '2024-10-18', '2025-3-17'];
+        const finals_day_2_dates = ['2024-10-11', '2024-10-19', '2025-3-18'];
+        const last_day_dates = ['2025-5-30'];
+        const reg_schedule = [
+            {name: 'Period 1', start: "8:30", end: "10:00"},
+            {name: 'Period 2', start: "10:08", end: "11:42"},
+            {name: 'Lunch', start: "11:42", end: "12:14"},
+            {name: "Period 3", start: "12:22", end: "13:52"},
+            {name: "Period 4", start: "14:00", end: "15:30"}
+        ];
+
+        const homeroom_schedule = [
+            {name: 'Period 1', start: "8:30", end: "9:50"},
+            {name: 'Period 2', start: "9:58", end: "11:18"},
+            {name: "Homeroom", start: "11:26", end: "12:01"},
+            {name: 'Lunch', start: "12:01", end: "12:34"},
+            {name: "Period 3", start: "12:42", end: "14:02"},
+            {name: "Period 4", start: "14:10", end: "15:30"}
+        ];
+
+        const late_start_schedule = [
+            {name: 'Period 1', start: "10:00", end:"11:07"},
+            {name: 'Period 2', start: "11:15", end: "12:26"},
+            {name: 'Lunch', start: "12:26", end:"13:00"},
+            {name: 'Period 3', start: "13:08", end: "14:15"},
+            {name: 'Period 4', start: "14:23", end: "15:30"}
+        ];
+        const extended_lunch_schedule = [
+            {name: 'Period 1', start: "8:30", end: "9:57"},
+            {name: 'Period 2', start: "10:05", end: "11:32"},
+            {name: 'Lunch', start: "11:32", end: "12:19"},
+            {name: "Period 3", start: "12:27", end: "13:54"},
+            {name: "Period 4", start: "14:02", end: "15:30"}
+        ]
+        const finals_day_1_schedule = [
+            {name: 'Period 1', start: "8:30", end: "10:10"},
+            {name: 'Period 2', start: "10:18", end: "11:05"},
+            {name: "Lunch", start: "11:05", end: "11:37"},
+            {name: "Period 3", start: "11:45", end: "13:25"},
+            {name: "Period 4", start: "13:33", end: "14:20"}
+        ]
+        const finals_day_2_schedule = [
+            {name: 'Period 1', start: "8:30", end: "9:17"},
+            {name: 'Period 2', start: "9:25", end: "11:05"},
+            {name: "Lunch", start: "11:05", end: "11:37"},
+            {name: "Period 3", start: "11:45", end: "12:32"},
+            {name: "Period 4", start: "12:40", end: "14:20"}
+        ];
+        const last_day_schedule = [
+            {name: "Period 1", start: "8:30", end: "9:35"},
+            {name: "Period 2", start: "9:43", end: "10:48"},
+            {name: "Lunch", start: "10:48", end: "11:20"},
+            {name: "Period 3", start: "11:28", end: "12:33"},
+            {name: "Period 4", start: "12:41", end: "13:46"}
+        ]
+
+        const get_day = (date) => {
+            if (homeroom_dates.includes(date)) {
+                return [homeroom_schedule, "Homeroom Day"];
+            }
+            if (late_start_dates.includes(date)) {
+                return [late_start_schedule, "Late Start Day"];
+            }
+            if (finals_day_1_dates.includes(date)) {
+                return [finals_day_1_schedule, "Finals Day 1"];
+            }
+            if (finals_day_2_dates.includes(date)) {
+                return [finals_day_2_schedule, "Finals Day 2"];
+            }
+            if (last_day_dates.includes(date)) {
+                return [last_day_schedule, "Last Day of School"];
+            }
+            return [reg_schedule, "Regular Day"];
+        }
+        const to_time = (str)=>(parseInt(str.split(":")[0])*60)+parseInt(str.split(":")[1])+(parseInt(str.split(":")[2]??"0")/60)
+        const get_period = (schedule, time) => {
+            const now = to_time(time);
+            if (now < to_time(schedule[0].start)) {
+                return schedule[0]
+            }
+            for (let i = 0; i < schedule.length; i++) {
+                let period = schedule[i];
+                if ((now >= to_time(period.start) && now <= to_time(period.end)) || (now <= to_time(period.start) && now >= to_time(schedule[i-1].end) )) {
+                    return period;
+                }
+
+            }
+        }
+        
+        const [sched, type] = get_day(date);
+
+        
+
+        const display_period = (period, time, type) => {
+            document.getElementById('period').textContent=period.name;
+            document.getElementById('type').textContent=type;
+
+            if (to_time(time) < to_time(period.start)) {
+                document.getElementById('delim').textContent = "begins"
+                document.getElementById('when').textContent = period.start
+            } else {
+                document.getElementById('delim').textContent = "ends"
+                document.getElementById('when').textContent = period.end
+            }
+        }
+        const load = ()=>{
+            const time=new Date().toLocaleTimeString("en-US", {hour12: false})
+            const period = get_period(sched, time)
+            display_period(period, time, type)
+        }
+        load()
+        setInterval(load, 10000)
+        
+    </script>
+    </html>
