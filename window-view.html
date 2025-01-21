@@ -12,7 +12,8 @@
       h1 {
         color: #333;
       }
-      img {
+      img:not(a > img) {
+        height: 60vh;
         margin: 20px auto;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -28,7 +29,6 @@
     <h1>Window View</h1>
     <img
       src="https://jdszekeres.github.io/project-photos/windowView.png"
-      height="500"
       alt="Window View"
     />
     <a
